@@ -44,6 +44,115 @@
 
     /* ── SVG paper grain filter (defined once, used everywhere) ── */
     .grain-filter { position: absolute; width: 0; height: 0; }
+
+    /* ── Hero / Envelope ─────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh; /* GSAP will pin and expand this */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Warm radial vignette behind envelope */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%,
+        transparent 40%, rgba(212, 184, 120, 0.08) 100%);
+      pointer-events: none;
+    }
+
+    .envelope-scene {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      perspective: 900px;
+    }
+
+    .envelope {
+      position: relative;
+      width: 480px;
+      height: 320px;
+      filter: url(#grain);
+      drop-shadow: 0 20px 80px rgba(0,0,0,0.18);
+    }
+
+    .envelope-body {
+      position: absolute;
+      inset: 0;
+      background: var(--ivory);
+      border: 1.5px solid var(--gold);
+      border-radius: 2px;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.18);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Triangular envelope flap — CSS clip-path triangle */
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: var(--ivory-dark);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      border-top: 1.5px solid var(--gold);
+      transform-origin: top center;
+      transform-style: preserve-3d;
+      z-index: 10;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+    }
+
+    /* Wax seal */
+    .wax-seal {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      background: var(--ivory);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 5;
+      animation: sealPulse 3s ease-in-out infinite;
+    }
+
+    .wax-initials {
+      font-family: var(--font-script);
+      font-size: 22px;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    @keyframes sealPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.04); opacity: 0.85; }
+    }
+
+    /* Scroll hint */
+    .scroll-hint {
+      font-family: var(--font-sc);
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      opacity: 1;
+      text-transform: uppercase;
+    }
+
+    /* ── Responsive: envelope ─────────────────── */
+    @media (max-width: 767px) {
+      .envelope { width: 320px; height: 220px; }
+      .wax-seal { width: 44px; height: 44px; }
+      .wax-initials { font-size: 18px; }
+    }
   </style>
 </head>
 <body>
@@ -59,6 +168,27 @@
       </filter>
     </defs>
   </svg>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 1 — ENVELOPE REVEAL (HERO)
+  ══════════════════════════════════════════ -->
+  <section id="hero">
+    <div class="envelope-scene">
+      <div class="envelope">
+        <div class="envelope-flap"></div>
+        <div class="envelope-body">
+          <div class="wax-seal">
+            <span class="wax-initials">KC</span>
+          </div>
+          <!-- letter card inserted inside body so it clips correctly -->
+          <div class="letter-card" aria-hidden="true">
+            <!-- content added in Task 3 -->
+          </div>
+        </div>
+      </div>
+      <p class="scroll-hint">scroll to open</p>
+    </div>
+  </section>
 
   <script>
     gsap.registerPlugin(ScrollTrigger);
