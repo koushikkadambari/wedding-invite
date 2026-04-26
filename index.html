@@ -530,6 +530,75 @@
       opacity: 0.7;
       margin-top: 4px;
     }
+
+    /* ── Section 5: Countdown ────────────────── */
+    #countdown {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      padding: 80px 24px;
+      background: var(--ivory);
+    }
+
+    .countdown-display {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 0 36px;
+    }
+
+    .countdown-num {
+      font-family: var(--font-serif);
+      font-size: 96px;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      min-width: 2ch;
+      text-align: center;
+    }
+
+    .countdown-label {
+      font-family: var(--font-sc);
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--brown-mid);
+      text-transform: uppercase;
+    }
+
+    .countdown-sep {
+      width: 1px;
+      height: 64px;
+      background: var(--gold-light);
+      flex-shrink: 0;
+    }
+
+    .countdown-caption {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-style: italic;
+      color: var(--brown-mid);
+      letter-spacing: 0.04em;
+      opacity: 0;
+    }
+
+    @media (max-width: 767px) {
+      .countdown-num { font-size: 56px; }
+      .countdown-unit { padding: 0 16px; }
+      .countdown-sep { height: 40px; }
+    }
   </style>
 </head>
 <body>
@@ -837,6 +906,39 @@
     </div>
   </section>
 
+  <!-- ══════════════════════════════════════════
+       SECTION 5 — COUNTDOWN
+  ══════════════════════════════════════════ -->
+  <section id="countdown">
+    <p class="section-label">The Sumuhurtham begins in</p>
+
+    <div class="countdown-display" id="countdown-display">
+      <div class="countdown-unit">
+        <span class="countdown-num" id="cd-days">--</span>
+        <span class="countdown-label">Days</span>
+      </div>
+      <div class="countdown-sep" aria-hidden="true"></div>
+      <div class="countdown-unit">
+        <span class="countdown-num" id="cd-hours">--</span>
+        <span class="countdown-label">Hrs</span>
+      </div>
+      <div class="countdown-sep" aria-hidden="true"></div>
+      <div class="countdown-unit">
+        <span class="countdown-num" id="cd-mins">--</span>
+        <span class="countdown-label">Min</span>
+      </div>
+      <div class="countdown-sep" aria-hidden="true"></div>
+      <div class="countdown-unit">
+        <span class="countdown-num" id="cd-secs">--</span>
+        <span class="countdown-label">Sec</span>
+      </div>
+    </div>
+
+    <p class="countdown-caption">
+      10th May 2026 · 10:32 PM IST · Silverwood, Hyderabad
+    </p>
+  </section>
+
   <script>
     gsap.registerPlugin(ScrollTrigger);
     ScrollTrigger.normalizeScroll(true);
@@ -913,6 +1015,46 @@
         scrollTrigger: { trigger: card, start: 'top 88%' },
         delay: i * 0.08,
       });
+    });
+
+    /* ── Section 5: Countdown ── */
+    (function () {
+      const TARGET = new Date('2026-05-10T22:32:00+05:30').getTime();
+
+      function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
+
+      function updateCountdown() {
+        const now = Date.now();
+        const diff = TARGET - now;
+
+        if (diff <= 0) {
+          document.getElementById('countdown-display').innerHTML =
+            '<p style="font-family:var(--font-script);font-size:36px;color:var(--gold)">The celebration has begun ✦</p>';
+          return;
+        }
+
+        const days  = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff % 86400000) / 3600000);
+        const mins  = Math.floor((diff % 3600000)  / 60000);
+        const secs  = Math.floor((diff % 60000)    / 1000);
+
+        document.getElementById('cd-days').textContent  = pad(days);
+        document.getElementById('cd-hours').textContent = pad(hours);
+        document.getElementById('cd-mins').textContent  = pad(mins);
+        document.getElementById('cd-secs').textContent  = pad(secs);
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    })();
+
+    gsap.to('.countdown-display', {
+      opacity: 1, y: 0, duration: 0.9, ease: 'power2.out',
+      scrollTrigger: { trigger: '#countdown', start: 'top 75%' },
+    });
+    gsap.to('.countdown-caption', {
+      opacity: 1, duration: 0.9, ease: 'power2.out', delay: 0.2,
+      scrollTrigger: { trigger: '#countdown', start: 'top 75%' },
     });
   </script>
 
