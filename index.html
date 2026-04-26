@@ -126,11 +126,11 @@
       animation: sealPulse 3s ease-in-out infinite;
     }
 
-    .wax-initials {
-      font-family: var(--font-script);
-      font-size: 22px;
-      color: var(--gold);
-      line-height: 1;
+    .wax-logo {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      mix-blend-mode: multiply;
     }
 
     @keyframes sealPulse {
@@ -152,7 +152,7 @@
     @media (max-width: 767px) {
       .envelope { width: 320px; height: 220px; }
       .wax-seal { width: 44px; height: 44px; }
-      .wax-initials { font-size: 18px; }
+      .wax-logo { width: 34px; height: 34px; }
     }
 
     /* ── Letter card ─────────────────────────── */
@@ -191,11 +191,11 @@
       color: var(--gold);
     }
 
-    .letter-monogram {
-      font-family: var(--font-script);
-      font-size: 44px;
-      color: var(--gold);
-      line-height: 1;
+    .letter-logo {
+      width: 88px;
+      height: 88px;
+      object-fit: contain;
+      mix-blend-mode: multiply;
     }
 
     .letter-names {
@@ -219,7 +219,7 @@
 
     @media (max-width: 767px) {
       .letter-card { left: 8px; right: 8px; padding: 14px; gap: 4px; }
-      .letter-monogram { font-size: 32px; }
+      .letter-logo { width: 64px; height: 64px; }
       .letter-names { font-size: 20px; }
       .arch-motif, .diamond-divider { width: 100px; }
     }
@@ -251,30 +251,13 @@
       margin: 8px 0;
     }
 
-    .monument {
-      height: 160px;
-      width: auto;
-      opacity: 0;
+    .union-logo {
+      width: 220px;
+      height: 220px;
+      object-fit: contain;
       mix-blend-mode: multiply;
-    }
-
-    .hawa-mahal  { transform: translateX(-40px); }
-    .charminar   { transform: translateX(40px); }
-
-    .union-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-bottom: 12px;
       opacity: 0;
       transform: translateY(16px);
-    }
-
-    .union-monogram {
-      font-family: var(--font-script);
-      font-size: 56px;
-      color: var(--gold);
-      line-height: 1;
     }
 
     .union-names {
@@ -307,9 +290,7 @@
     }
 
     @media (max-width: 767px) {
-      .monument { height: 116px; width: auto; }
-      .union-monuments { gap: 20px; }
-      .union-monogram { font-size: 40px; }
+      .union-logo { width: 160px; height: 160px; }
       .union-names { font-size: 36px; }
       .union-invite { font-size: 16px; }
     }
@@ -625,18 +606,13 @@
       border-top: 1px solid var(--gold-light);
     }
 
-    .footer-monuments {
-      display: flex;
-      gap: 24px;
-      align-items: flex-end;
-      margin-bottom: 8px;
-    }
-
-    .footer-monument {
-      height: 76px;
-      width: auto;
-      opacity: 0.7;
+    .footer-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
       mix-blend-mode: multiply;
+      opacity: 0.85;
+      margin-bottom: 8px;
     }
 
     .footer-hashtag {
@@ -678,7 +654,7 @@
 
     @media (max-width: 767px) {
       .footer-hashtag { font-size: 36px; }
-      .footer-monument { height: 58px; width: auto; }
+      .footer-logo { width: 80px; height: 80px; }
     }
 
     /* ── Section separators ─────────────────── */
@@ -711,7 +687,7 @@
         <div class="envelope-flap"></div>
         <div class="envelope-body">
           <div class="wax-seal">
-            <span class="wax-initials">KC</span>
+            <img class="wax-logo" src="logo.png" alt="KC" />
           </div>
           <!-- letter card inserted inside body so it clips correctly -->
           <div class="letter-card" aria-hidden="true">
@@ -725,7 +701,7 @@
             </svg>
 
             <p class="letter-blessing">॥ Shree Ganeshay Namah ॥</p>
-            <p class="letter-monogram">KC</p>
+            <img class="letter-logo" src="logo.png" alt="KC" />
             <p class="letter-names">Charu &amp; Koushik</p>
 
             <!-- Rajasthani diamond-chain divider -->
@@ -751,15 +727,7 @@
   <section id="union">
     <p class="union-blessing">॥ Shree Ganeshay Namah ॥</p>
 
-    <div class="union-monuments">
-      <img class="monument hawa-mahal" src="hawa-mahal.png" alt="Hawa Mahal, Jaipur" />
-
-      <div class="union-center">
-        <p class="union-monogram">KC</p>
-      </div>
-
-      <img class="monument charminar" src="charminar.png" alt="Charminar, Hyderabad" />
-    </div>
+    <img class="union-logo" src="logo.png" alt="Charu & Koushik" />
 
     <h1 class="union-names">Charu &amp; Sri Ram Koushik</h1>
 
@@ -984,10 +952,7 @@
        SECTION 6 — FOOTER
   ══════════════════════════════════════════ -->
   <footer id="footer">
-    <div class="footer-monuments" aria-hidden="true">
-      <img class="footer-monument" src="hawa-mahal.png" alt="" />
-      <img class="footer-monument" src="charminar.png" alt="" />
-    </div>
+    <img class="footer-logo" src="logo.png" alt="" aria-hidden="true" />
 
     <p class="footer-hashtag">#SRIgotCHARmed</p>
 
@@ -1036,16 +1001,12 @@
       }, 0.7);
 
     /* ── Section 2: The Union — entrance animations ── */
-    ScrollTrigger.batch(['.hawa-mahal', '.charminar'], {
-      onEnter: (elements) => {
-        elements.forEach((el) => {
-          gsap.to(el, { opacity: 1, x: 0, duration: 0.9, ease: 'power2.out' });
-        });
-      },
-      start: 'top 80%',
+    gsap.to('.union-logo', {
+      opacity: 1, y: 0, duration: 1, ease: 'power2.out',
+      scrollTrigger: { trigger: '#union', start: 'top 80%' },
     });
 
-    gsap.utils.toArray(['.union-center', '.union-names', '.union-invite', '.union-hashtag'])
+    gsap.utils.toArray(['.union-names', '.union-invite', '.union-hashtag'])
       .forEach((el, i) => {
         gsap.to(el, {
           opacity: 1,
