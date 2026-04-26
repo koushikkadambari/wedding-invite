@@ -41,6 +41,9 @@
       color: var(--brown);
       font-family: var(--font-serif);
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      opacity: 0;
     }
 
     /* ── SVG paper grain filter (defined once, used everywhere) ── */
@@ -137,14 +140,38 @@
       50% { transform: scale(1.04); opacity: 0.85; }
     }
 
+    @keyframes goldShimmer {
+      0%   { background-position: 200% center; }
+      100% { background-position: -200% center; }
+    }
+
+    @keyframes arrowBounce {
+      0%, 100% { transform: translateY(0); opacity: 0.45; }
+      50%       { transform: translateY(7px); opacity: 1; }
+    }
+
+    @keyframes logoBreathe {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%       { transform: translateY(-7px) scale(1.018); }
+    }
+
     /* Scroll hint */
     .scroll-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
       font-family: var(--font-sc);
       font-size: 11px;
       letter-spacing: 0.25em;
       color: var(--gold);
       opacity: 1;
       text-transform: uppercase;
+    }
+
+    .scroll-arrow {
+      animation: arrowBounce 1.6s ease-in-out infinite;
+      color: var(--gold);
     }
 
     /* ── Responsive: envelope ─────────────────── */
@@ -259,20 +286,20 @@
 
     .union-names {
       font-family: var(--font-script);
-      font-size: 52px;
+      font-size: 68px;
       color: var(--brown);
       font-weight: 400;
-      line-height: 1.15;
+      line-height: 1.1;
       opacity: 0;
-      transform: translateY(16px);
+      transform: translateY(20px);
     }
 
     .union-invite {
       font-family: var(--font-serif);
-      font-size: 18px;
+      font-size: 19px;
       font-style: italic;
       color: var(--brown-mid);
-      line-height: 1.8;
+      line-height: 2;
       opacity: 0;
       transform: translateY(16px);
     }
@@ -280,15 +307,20 @@
     .union-hashtag {
       font-family: var(--font-sc);
       font-size: 13px;
-      letter-spacing: 0.18em;
-      color: var(--gold);
+      letter-spacing: 0.22em;
+      background: linear-gradient(90deg, var(--gold) 0%, #e8c98a 40%, var(--gold) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: goldShimmer 4s linear infinite;
       opacity: 0;
       transform: translateY(12px);
     }
 
     @media (max-width: 767px) {
       .union-logo { width: 160px; height: 160px; }
-      .union-names { font-size: 36px; }
+      .union-names { font-size: 44px; }
       .union-invite { font-size: 16px; }
     }
 
@@ -340,6 +372,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 0 0 5px var(--ivory), 0 0 0 6px var(--gold-light),
+                  0 12px 40px rgba(42,30,18,0.12);
+      transition: box-shadow 0.4s ease;
+    }
+    .portrait:hover {
+      box-shadow: 0 0 0 5px var(--ivory), 0 0 0 6px var(--gold),
+                  0 16px 48px rgba(42,30,18,0.18);
     }
 
     .portrait:not([style*="background-image"]) .portrait-initial {
@@ -423,8 +462,13 @@
       border-radius: 4px;
       overflow: hidden;
       border-left: 3px solid var(--gold);
-      opacity: 0;
-      transform: translateY(16px);
+      box-shadow: 0 2px 12px rgba(42,30,18,0.05), 0 1px 4px rgba(42,30,18,0.04);
+      transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94),
+                  box-shadow 0.35s ease;
+    }
+    .event-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 56px rgba(42,30,18,0.13), 0 6px 16px rgba(42,30,18,0.08);
     }
 
     .event-card[data-accent="orange"] {
@@ -538,9 +582,23 @@
       display: flex;
       align-items: center;
       gap: 0;
-      opacity: 0;
-      transform: translateY(16px);
+      position: relative;
+      padding: 40px 0;
     }
+    .countdown-display::before,
+    .countdown-display::after {
+      content: '';
+      position: absolute;
+      left: 5%;
+      right: 5%;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%, var(--gold-light) 25%,
+        var(--gold) 50%,
+        var(--gold-light) 75%, transparent 100%);
+    }
+    .countdown-display::before { top: 0; }
+    .countdown-display::after  { bottom: 0; }
 
     .countdown-unit {
       display: flex;
@@ -600,7 +658,6 @@
       gap: 20px;
       background: var(--ivory);
       text-align: center;
-      border-top: 1px solid var(--gold-light);
     }
 
     .footer-logo {
@@ -614,8 +671,13 @@
     .footer-hashtag {
       font-family: var(--font-script);
       font-size: 48px;
-      color: var(--gold);
       line-height: 1.1;
+      background: linear-gradient(90deg, var(--gold) 0%, #e8c98a 40%, var(--gold) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: goldShimmer 4s linear infinite;
     }
 
     .footer-love {
@@ -656,7 +718,11 @@
     /* ── Section separators ─────────────────── */
     section + section,
     section + footer {
-      border-top: 1px solid var(--gold-light);
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg,
+        transparent 0%, var(--gold-light) 25%,
+        var(--gold) 50%,
+        var(--gold-light) 75%, transparent 100%) 1;
     }
   </style>
 </head>
@@ -713,7 +779,12 @@
           </div>
         </div>
       </div>
-      <p class="scroll-hint">scroll to open</p>
+      <p class="scroll-hint">
+        scroll to open
+        <svg class="scroll-arrow" viewBox="0 0 20 12" width="20" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="2,2 10,10 18,2"/>
+        </svg>
+      </p>
     </div>
   </section>
 
@@ -997,42 +1068,60 @@
       }, 0.7);
 
     /* ── Section 2: The Union — entrance animations ── */
-    gsap.to('.union-logo', {
-      opacity: 1, y: 0, duration: 1, ease: 'power2.out',
-      scrollTrigger: { trigger: '#union', start: 'top 80%' },
-    });
+    gsap.fromTo('.union-logo',
+      { opacity: 0, y: 28, scale: 0.93 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 1.3, ease: 'power3.out',
+        scrollTrigger: { trigger: '#union', start: 'top 78%' },
+        onComplete() {
+          gsap.to('.union-logo', {
+            y: -8, repeat: -1, yoyo: true,
+            duration: 3.5, ease: 'sine.inOut',
+          });
+        },
+      }
+    );
 
-    gsap.utils.toArray(['.union-names', '.union-invite', '.union-hashtag'])
+    gsap.utils.toArray(['.union-blessing', '.union-names', '.union-invite', '.union-hashtag'])
       .forEach((el, i) => {
-        gsap.to(el, {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: 'power2.out',
-          scrollTrigger: { trigger: el, start: 'top 85%' },
-          delay: i * 0.1,
-        });
+        gsap.fromTo(el,
+          { opacity: 0, y: 30, scale: 0.97 },
+          {
+            opacity: 1, y: 0, scale: 1,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 88%' },
+            delay: i * 0.13,
+            clearProps: 'transform,scale',
+          }
+        );
       });
 
     /* ── Section 3: Bride & Groom ── */
-    gsap.to('.couple-grid', {
-      opacity: 1,
-      y: 0,
-      duration: 0.9,
-      ease: 'power2.out',
-      scrollTrigger: { trigger: '#couple', start: 'top 75%' },
-    });
+    gsap.fromTo('.couple-grid',
+      { opacity: 0, y: 30, scale: 0.97 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 1.1, ease: 'power3.out',
+        scrollTrigger: { trigger: '#couple', start: 'top 75%' },
+        clearProps: 'transform,scale',
+      }
+    );
 
     /* ── Section 4: Events — stagger in ── */
     gsap.utils.toArray('.event-card').forEach((card, i) => {
-      gsap.to(card, {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: card, start: 'top 88%' },
-        delay: i * 0.08,
-      });
+      gsap.fromTo(card,
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: card, start: 'top 90%' },
+          delay: i * 0.09,
+          clearProps: 'transform,opacity',
+        }
+      );
     });
 
     /* ── Section 5: Countdown ── */
@@ -1069,14 +1158,27 @@
       timerId = setInterval(updateCountdown, 1000);
     })();
 
-    gsap.to('.countdown-display', {
-      opacity: 1, y: 0, duration: 0.9, ease: 'power2.out',
-      scrollTrigger: { trigger: '#countdown', start: 'top 75%' },
-    });
-    gsap.to('.countdown-caption', {
-      opacity: 1, duration: 0.9, ease: 'power2.out', delay: 0.2,
-      scrollTrigger: { trigger: '#countdown', start: 'top 75%' },
-    });
+    gsap.fromTo('.countdown-display',
+      { opacity: 0, y: 24, scale: 0.97 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 1.1, ease: 'power3.out',
+        scrollTrigger: { trigger: '#countdown', start: 'top 75%' },
+        clearProps: 'transform,scale',
+      }
+    );
+    gsap.fromTo('.countdown-caption',
+      { opacity: 0, y: 12 },
+      {
+        opacity: 1, y: 0,
+        duration: 0.9, ease: 'power2.out', delay: 0.25,
+        scrollTrigger: { trigger: '#countdown', start: 'top 75%' },
+        clearProps: 'transform',
+      }
+    );
+
+    /* ── Page load fade-in ── */
+    gsap.to('body', { opacity: 1, duration: 0.9, ease: 'power1.out', delay: 0.05 });
   </script>
 
 </body>
