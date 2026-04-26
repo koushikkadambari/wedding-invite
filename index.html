@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Charu & Koushik · 10 May 2026</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+SC:wght@300;400&family=Great+Vibes&display=swap" rel="stylesheet" />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ── Reset & base ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; } /* GSAP controls scroll, not CSS */
+
+    /* ── Design tokens ────────────────────────────── */
+    :root {
+      --ivory:      #fdf8f0;
+      --ivory-dark: #f0e6d2;
+      --ivory-bright: #fffdf8;
+      --brown:      #2a1e12;
+      --brown-mid:  #7a6a5a;
+      --gold:       #c9a87a;
+      --gold-light: #e8d5bc;
+      --orange:     #e07840;
+
+      --font-serif:  'Cormorant Garamond', Georgia, serif;
+      --font-sc:     'Cormorant SC', Georgia, serif;
+      --font-script: 'Great Vibes', cursive;
+    }
+
+    body {
+      background: var(--ivory);
+      color: var(--brown);
+      font-family: var(--font-serif);
+      overflow-x: hidden;
+    }
+
+    /* ── SVG paper grain filter (defined once, used everywhere) ── */
+    .grain-filter { position: absolute; width: 0; height: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- Paper grain SVG filter — referenced by filter: url(#grain) -->
+  <svg class="grain-filter" aria-hidden="true">
+    <defs>
+      <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" result="noise"/>
+        <feColorMatrix type="saturate" values="0" in="noise" result="grey"/>
+        <feBlend in="SourceGraphic" in2="grey" mode="multiply" result="blend"/>
+        <feComposite in="blend" in2="SourceGraphic" operator="in"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.normalizeScroll(true);
+  </script>
+
+</body>
+</html>
