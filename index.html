@@ -78,6 +78,7 @@
       width: 480px;
       height: 320px;
       filter: url(#grain) drop-shadow(0 20px 80px rgba(0,0,0,0.18));
+      transform-style: preserve-3d;
     }
 
     .envelope-body {
@@ -104,7 +105,7 @@
       clip-path: polygon(0 0, 100% 0, 50% 100%);
       border-top: 1.5px solid var(--gold);
       transform-origin: top center;
-      transform-style: preserve-3d;
+      backface-visibility: hidden;
       z-index: 10;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
     }
