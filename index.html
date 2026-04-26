@@ -153,6 +153,75 @@
       .wax-seal { width: 44px; height: 44px; }
       .wax-initials { font-size: 18px; }
     }
+
+    /* ── Letter card ─────────────────────────── */
+    .letter-card {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 0;
+      top: 0;
+      background: var(--ivory-bright);
+      border: 1px solid var(--gold-light);
+      outline: 1px solid var(--gold);
+      outline-offset: -6px;
+      border-radius: 1px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 20px;
+      /* starts hidden below envelope, GSAP will animate this */
+      transform: translateY(70px);
+      opacity: 0;
+      z-index: 2;
+    }
+
+    .arch-motif {
+      width: 140px;
+      margin-bottom: 4px;
+    }
+
+    .letter-blessing {
+      font-family: var(--font-sc);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+    }
+
+    .letter-monogram {
+      font-family: var(--font-script);
+      font-size: 44px;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .letter-names {
+      font-family: var(--font-script);
+      font-size: 28px;
+      color: var(--brown);
+      line-height: 1.2;
+    }
+
+    .diamond-divider {
+      width: 140px;
+      margin: 2px 0;
+    }
+
+    .letter-date {
+      font-family: var(--font-sc);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--brown-mid);
+    }
+
+    @media (max-width: 767px) {
+      .letter-card { left: 8px; right: 8px; padding: 14px; gap: 4px; }
+      .letter-monogram { font-size: 32px; }
+      .letter-names { font-size: 20px; }
+      .arch-motif, .diamond-divider { width: 100px; }
+    }
   </style>
 </head>
 <body>
@@ -182,7 +251,29 @@
           </div>
           <!-- letter card inserted inside body so it clips correctly -->
           <div class="letter-card" aria-hidden="true">
-            <!-- content added in Task 3 -->
+            <!-- Nizami arch top motif -->
+            <svg class="arch-motif" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10,38 Q10,8 100,4 Q190,8 190,38" stroke="#c9a87a" stroke-width="1"/>
+              <circle cx="100" cy="4" r="3" fill="#c9a87a" opacity="0.5"/>
+              <line x1="10" y1="38" x2="190" y2="38" stroke="#c9a87a" stroke-width="0.7"/>
+              <circle cx="45" cy="24" r="2" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
+              <circle cx="155" cy="24" r="2" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
+            </svg>
+
+            <p class="letter-blessing">॥ Shree Ganeshay Namah ॥</p>
+            <p class="letter-monogram">KC</p>
+            <p class="letter-names">Charu &amp; Koushik</p>
+
+            <!-- Rajasthani diamond-chain divider -->
+            <svg class="diamond-divider" viewBox="0 0 200 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <line x1="0" y1="6" x2="70" y2="6" stroke="#c9a87a" stroke-width="0.7"/>
+              <polygon points="80,6 86,2 92,6 86,10" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
+              <circle cx="100" cy="6" r="2.5" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
+              <polygon points="108,6 114,2 120,6 114,10" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
+              <line x1="130" y1="6" x2="200" y2="6" stroke="#c9a87a" stroke-width="0.7"/>
+            </svg>
+
+            <p class="letter-date">10 · 05 · 2026</p>
           </div>
         </div>
       </div>
