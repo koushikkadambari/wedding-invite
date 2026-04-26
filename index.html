@@ -175,7 +175,7 @@
       /* starts hidden below envelope, GSAP will animate this */
       transform: translateY(70px);
       opacity: 0;
-      z-index: 2;
+      z-index: 6;
     }
 
     .arch-motif {
@@ -300,8 +300,9 @@
     envelopeTl
       /* 0–15%: scroll hint fades out */
       .to('.scroll-hint', { opacity: 0, duration: 0.15, ease: 'none' }, 0)
-      /* 40–70%: flap rotates open, seal pulse stops */
-      .to('.wax-seal', { animation: 'none', duration: 0.01 }, 0.39)
+      /* 35–40%: seal fades out before flap opens */
+      .to('.wax-seal', { opacity: 0, duration: 0.05, ease: 'none' }, 0.35)
+      /* 40–70%: flap rotates open */
       .to('.envelope-flap', {
         rotateX: -180,
         duration: 0.3,
@@ -309,7 +310,7 @@
       }, 0.4)
       /* 70–100%: letter card rises and fades in */
       .to('.letter-card', {
-        y: -80,
+        y: -60,
         opacity: 1,
         duration: 0.3,
         ease: 'none',
