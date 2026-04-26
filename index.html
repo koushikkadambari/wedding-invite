@@ -362,7 +362,12 @@
       justify-content: center;
     }
 
+    .portrait:not([style*="background-image"]) .portrait-initial {
+      display: flex;
+    }
+
     .portrait-initial {
+      display: none;
       font-family: var(--font-script);
       font-size: 64px;
       color: var(--gold);
@@ -531,6 +536,12 @@
       margin-top: 4px;
     }
 
+    @media (max-width: 767px) {
+      .events-heading { font-size: 36px; }
+      .event-header { padding: 16px 16px 10px; }
+      .event-body { padding: 12px 16px 16px; }
+    }
+
     /* ── Section 5: Countdown ────────────────── */
     #countdown {
       min-height: 60vh;
@@ -660,6 +671,11 @@
       font-size: 11px;
       letter-spacing: 0.2em;
       color: var(--gold-light);
+    }
+
+    @media (max-width: 767px) {
+      .footer-hashtag { font-size: 36px; }
+      .footer-monument { width: 40px; height: 58px; }
     }
 
     /* ── Section separators ─────────────────── */
@@ -1154,11 +1170,14 @@
 
       function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
 
+      var timerId;
+
       function updateCountdown() {
         const now = Date.now();
         const diff = TARGET - now;
 
         if (diff <= 0) {
+          clearInterval(timerId);
           document.getElementById('countdown-display').innerHTML =
             '<p style="font-family:var(--font-script);font-size:36px;color:var(--gold)">The celebration has begun ✦</p>';
           return;
@@ -1176,7 +1195,7 @@
       }
 
       updateCountdown();
-      setInterval(updateCountdown, 1000);
+      timerId = setInterval(updateCountdown, 1000);
     })();
 
     gsap.to('.countdown-display', {
