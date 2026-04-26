@@ -536,6 +536,14 @@
       .ev-venue { min-height: 44px; align-items: center; padding: 4px 0; }
       .dr-row   { min-height: 36px; align-items: center; }
 
+      /* Disable shimmer animation — -webkit-background-clip:text + infinite animation crashes iOS WebKit */
+      .shimmer {
+        animation: none;
+        background: none;
+        -webkit-text-fill-color: var(--gold);
+        color: var(--gold);
+      }
+
       /* Monument silhouettes overlap badly on narrow screens */
       .monument { width: 130px; height: 150px; opacity: 0.045; }
       .monument.left  { left: -20px; }
@@ -878,19 +886,18 @@
 <script>
   gsap.registerPlugin(ScrollTrigger);
 
-  /* normalizeScroll helps mobile but can fight iOS momentum — only enable on touch */
   var isMobile = window.innerWidth < 768;
-  if (isMobile) {
-    ScrollTrigger.normalizeScroll({ allowNestedScroll: true });
-  } else {
+  /* normalizeScroll on mobile fights iOS momentum scroll and can crash WebKit */
+  if (!isMobile) {
     ScrollTrigger.normalizeScroll(true);
   }
 
-  /* Floating petals */
+  /* Floating petals — skip entirely on mobile to prevent GPU layer overload */
   (function () {
+    if (isMobile) return;
     var hero   = document.getElementById('hero');
     var colors = ['#d46820','#c85428','#e07030','#cc5c28','#e88840'];
-    var count  = isMobile ? 10 : 22;   /* fewer on mobile for performance */
+    var count  = 22;
     for (var i = 0; i < count; i++) {
       var el   = document.createElement('div');
       el.className = 'petal';
@@ -911,10 +918,11 @@
     }
   })();
 
-  /* Gold bokeh */
+  /* Gold bokeh — skip on mobile */
   (function () {
+    if (isMobile) return;
     var hero = document.getElementById('hero');
-    var count = isMobile ? 8 : 18;
+    var count = 18;
     for (var i = 0; i < count; i++) {
       var el = document.createElement('div');
       el.className = 'bokeh';
