@@ -3,1183 +3,1020 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#fdf8f0" />
-  <title>Charu & Koushik · 10 May 2026</title>
+  <meta name="theme-color" content="#0c0905" />
+  <title>Charu &amp; Koushik · 10 May 2026</title>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+SC:wght@300;400&family=Great+Vibes&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cormorant+SC:wght@300;400;500&family=Great+Vibes&display=swap" rel="stylesheet" />
 
-  <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <style>
-    /* ── Reset & base ─────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: auto; } /* GSAP controls scroll, not CSS */
+    html { scroll-behavior: auto; }
 
-    /* ── Design tokens ────────────────────────────── */
     :root {
-      --ivory:      #fdf8f0;
-      --ivory-dark: #f0e6d2;
-      --ivory-bright: #fffdf8;
-      --brown:      #2a1e12;
-      --brown-mid:  #7a6a5a;
-      --gold:       #c9a87a;
-      --gold-light: #e8d5bc;
-      --orange:     #e07840;
-
-      --font-serif:  'Cormorant Garamond', Georgia, serif;
-      --font-sc:     'Cormorant SC', Georgia, serif;
-      --font-script: 'Great Vibes', cursive;
+      --ivory:        #faf5ec;
+      --ivory-warm:   #f0e3c8;
+      --ivory-bright: #fffdf7;
+      --ivory-mid:    #e6d4b0;
+      --charcoal:     #0c0905;
+      --charcoal-mid: #181209;
+      --charcoal-warm:#241a0e;
+      --gold:         #c8a56c;
+      --gold-bright:  #e0c076;
+      --gold-dim:     #9a7840;
+      --gold-light:   #e4ceaa;
+      --brown:        #291c0c;
+      --brown-mid:    #785e38;
+      --on-dark:      #ede0c8;
+      --on-dark-dim:  #a8865a;
+      --orange:       #cc6a30;
+      --serif:   'Cormorant Garamond', Georgia, serif;
+      --sc:      'Cormorant SC', Georgia, serif;
+      --script:  'Great Vibes', cursive;
     }
 
     body {
-      background: var(--ivory);
+      background: var(--charcoal);
       color: var(--brown);
-      font-family: var(--font-serif);
+      font-family: var(--serif);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-      opacity: 0;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior-y: none;
     }
 
-    /* ── SVG paper grain filter (defined once, used everywhere) ── */
-    .grain-filter { position: absolute; width: 0; height: 0; }
-
-    /* ── Hero / Envelope ─────────────────────── */
-    #hero {
-      position: relative;
-      height: 100vh; /* GSAP will pin and expand this */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    /* Warm radial vignette behind envelope */
-    #hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 50%,
-        transparent 40%, rgba(212, 184, 120, 0.08) 100%);
-      pointer-events: none;
-    }
-
-    .envelope-scene {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 28px;
-      perspective: 900px;
-    }
-
-    .envelope {
-      position: relative;
-      width: 480px;
-      height: 320px;
-      filter: url(#grain) drop-shadow(0 20px 80px rgba(0,0,0,0.18));
-      transform-style: preserve-3d;
-    }
-
-    .envelope-body {
-      position: absolute;
-      inset: 0;
-      background: var(--ivory);
-      border: 1.5px solid var(--gold);
-      border-radius: 2px;
-      box-shadow: 0 20px 80px rgba(0,0,0,0.18);
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Triangular envelope flap — CSS clip-path triangle */
-    .envelope-flap {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 50%;
-      background: var(--ivory-dark);
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
-      border-top: 1.5px solid var(--gold);
-      transform-origin: top center;
-      backface-visibility: hidden;
-      z-index: 10;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
-    }
-
-    /* Wax seal */
-    .wax-seal {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      border: 1.5px solid var(--gold);
-      background: var(--ivory);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      z-index: 5;
-      animation: sealPulse 3s ease-in-out infinite;
-    }
-
-    .wax-logo {
-      width: 44px;
-      height: 44px;
-      object-fit: contain;
-    }
-
-    @keyframes sealPulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.04); opacity: 0.85; }
-    }
-
+    /* Gold shimmer text */
     @keyframes goldShimmer {
-      0%   { background-position: 200% center; }
-      100% { background-position: -200% center; }
+      0%   { background-position: -300% center; }
+      100% { background-position:  300% center; }
     }
-
-    @keyframes arrowBounce {
-      0%, 100% { transform: translateY(0); opacity: 0.45; }
-      50%       { transform: translateY(7px); opacity: 1; }
-    }
-
-    @keyframes logoBreathe {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50%       { transform: translateY(-7px) scale(1.018); }
-    }
-
-    /* Scroll hint */
-    .scroll-hint {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--font-sc);
-      font-size: 11px;
-      letter-spacing: 0.25em;
-      color: var(--gold);
-      opacity: 1;
-      text-transform: uppercase;
-    }
-
-    .scroll-arrow {
-      animation: arrowBounce 1.6s ease-in-out infinite;
-      color: var(--gold);
-    }
-
-    /* ── Responsive: envelope ─────────────────── */
-    @media (max-width: 767px) {
-      .envelope { width: 320px; height: 220px; }
-      .wax-seal { width: 44px; height: 44px; }
-      .wax-logo { width: 34px; height: 34px; }
-    }
-
-    /* ── Letter card ─────────────────────────── */
-    .letter-card {
-      position: absolute;
-      left: 12px;
-      right: 12px;
-      bottom: 0;
-      top: 0;
-      background: var(--ivory-bright);
-      border: 1px solid var(--gold-light);
-      outline: 1px solid var(--gold);
-      outline-offset: -6px;
-      border-radius: 1px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 20px;
-      /* starts hidden below envelope, GSAP will animate this */
-      transform: translateY(70px);
-      opacity: 0;
-      z-index: 6;
-    }
-
-    .arch-motif {
-      width: 140px;
-      margin-bottom: 4px;
-    }
-
-    .letter-blessing {
-      font-family: var(--font-sc);
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      color: var(--gold);
-    }
-
-    .letter-logo {
-      width: 88px;
-      height: 88px;
-      object-fit: contain;
-    }
-
-    .letter-names {
-      font-family: var(--font-script);
-      font-size: 28px;
-      color: var(--brown);
-      line-height: 1.2;
-    }
-
-    .diamond-divider {
-      width: 140px;
-      margin: 2px 0;
-    }
-
-    .letter-date {
-      font-family: var(--font-sc);
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      color: var(--brown-mid);
-    }
-
-    @media (max-width: 767px) {
-      .letter-card { left: 8px; right: 8px; padding: 14px; gap: 4px; }
-      .letter-logo { width: 64px; height: 64px; }
-      .letter-names { font-size: 20px; }
-      .arch-motif, .diamond-divider { width: 100px; }
-    }
-
-    /* ── Section 2: The Union ────────────────── */
-    #union {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      padding: 80px 24px;
-      text-align: center;
-      background: var(--ivory);
-    }
-
-    .union-blessing {
-      font-family: var(--font-sc);
-      font-size: 10px;
-      letter-spacing: 0.25em;
-      color: var(--gold);
-    }
-
-    .union-monuments {
-      display: flex;
-      align-items: flex-end;
-      gap: 32px;
-      margin: 8px 0;
-    }
-
-    .union-logo {
-      width: 220px;
-      height: 220px;
-      object-fit: contain;
-      opacity: 0;
-      transform: translateY(16px);
-    }
-
-    .union-names {
-      font-family: var(--font-script);
-      font-size: 68px;
-      color: var(--brown);
-      font-weight: 400;
-      line-height: 1.1;
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    .union-invite {
-      font-family: var(--font-serif);
-      font-size: 19px;
-      font-style: italic;
-      color: var(--brown-mid);
-      line-height: 2;
-      opacity: 0;
-      transform: translateY(16px);
-    }
-
-    .union-hashtag {
-      font-family: var(--font-sc);
-      font-size: 13px;
-      letter-spacing: 0.22em;
-      background: linear-gradient(90deg, var(--gold) 0%, #e8c98a 40%, var(--gold) 100%);
-      background-size: 200% auto;
+    .shimmer {
+      background: linear-gradient(90deg,
+        var(--gold-dim) 0%, var(--gold-bright) 28%,
+        #f8eeaa 50%, var(--gold-bright) 72%, var(--gold-dim) 100%);
+      background-size: 300% auto;
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: goldShimmer 4s linear infinite;
-      opacity: 0;
-      transform: translateY(12px);
+      -webkit-text-fill-color: transparent;
+      animation: goldShimmer 7s linear infinite;
     }
 
-    @media (max-width: 767px) {
-      .union-logo { width: 160px; height: 160px; }
-      .union-names { font-size: 44px; }
-      .union-invite { font-size: 16px; }
+    /* Floating petals */
+    @keyframes petalFall {
+      0%   { transform: translateY(-40px) translateX(0px) rotate(0deg); opacity: 0; }
+      5%   { opacity: 0.8; }
+      90%  { opacity: 0.5; }
+      100% { transform: translateY(105vh) translateX(var(--sway)) rotate(var(--spin)); opacity: 0; }
+    }
+    .petal {
+      position: absolute; pointer-events: none; z-index: 3;
+      border-radius: 60% 40% 60% 0;
+      animation: petalFall var(--dur,9s) var(--dly,0s) linear infinite;
     }
 
-    /* ── Section 3: Bride & Groom ────────────── */
-    #couple {
-      min-height: 70vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 48px;
-      padding: 80px 24px;
-      background: var(--ivory);
+    /* Bokeh */
+    @keyframes bokeh {
+      0%   { opacity: 0; transform: translateY(0) scale(1); }
+      50%  { opacity: var(--bop,0.12); }
+      100% { opacity: 0; transform: translateY(-24px) scale(1.3); }
+    }
+    .bokeh {
+      position: absolute; border-radius: 50%; background: var(--gold);
+      pointer-events: none;
+      animation: bokeh var(--bd,6s) var(--bdly,0s) ease-in-out infinite alternate;
     }
 
     .section-label {
-      font-family: var(--font-sc);
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      color: var(--gold);
-      text-transform: uppercase;
+      font-family: var(--sc); font-size: 10px;
+      letter-spacing: 0.38em; text-transform: uppercase;
     }
 
+    /* ── HERO ───────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      height: 100dvh; /* iOS Safari dynamic viewport */
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; background: var(--charcoal);
+    }
+    #hero::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 55% 45% at 50% 52%,
+        rgba(200,165,108,0.06) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .envelope-scene {
+      position: relative; z-index: 5;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 36px; perspective: 1200px;
+    }
+
+    .envelope {
+      position: relative; width: 540px; height: 352px;
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 48px 120px rgba(0,0,0,0.6))
+              drop-shadow(0 4px 24px rgba(200,165,108,0.18));
+    }
+
+    .env-body {
+      position: absolute; inset: 0;
+      background: linear-gradient(155deg, var(--ivory-bright) 0%, var(--ivory-warm) 100%);
+      border: 1px solid rgba(200,165,108,0.55);
+      border-radius: 2px; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .env-body::before {
+      content: ''; position: absolute; inset: 7px;
+      border: 0.5px solid rgba(200,165,108,0.35);
+      border-radius: 1px; pointer-events: none; z-index: 2;
+    }
+    .env-body::after {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 0% 0%,   rgba(200,165,108,0.18) 0%, transparent 22%),
+        radial-gradient(circle at 100% 0%,  rgba(200,165,108,0.18) 0%, transparent 22%),
+        radial-gradient(circle at 0% 100%,  rgba(200,165,108,0.18) 0%, transparent 22%),
+        radial-gradient(circle at 100% 100%,rgba(200,165,108,0.18) 0%, transparent 22%);
+      pointer-events: none; z-index: 2;
+    }
+
+    .env-fold-l, .env-fold-r {
+      position: absolute; bottom: 0;
+      border-style: solid; z-index: 1; pointer-events: none;
+    }
+    .env-fold-l { left: 0; border-width: 176px 0 0 270px;
+      border-color: transparent transparent transparent rgba(0,0,0,0.05); }
+    .env-fold-r { right: 0; border-width: 176px 270px 0 0;
+      border-color: transparent rgba(0,0,0,0.05) transparent transparent; }
+
+    .env-flap {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 53%;
+      background: linear-gradient(175deg, var(--ivory-mid) 0%, var(--ivory-warm) 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      backface-visibility: hidden; z-index: 10;
+      box-shadow: inset 0 -4px 12px rgba(0,0,0,0.06);
+    }
+    .env-flap::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 12%; right: 12%; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(200,165,108,0.5), transparent);
+    }
+
+    .wax-seal {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 76px; height: 76px; z-index: 12;
+      animation: sealBreath 3.5s ease-in-out infinite;
+    }
+    @keyframes sealBreath {
+      0%, 100% { transform: translate(-50%,-50%) scale(1); }
+      50%       { transform: translate(-50%,-50%) scale(1.035); }
+    }
+    .wax-seal-disc {
+      width: 76px; height: 76px; border-radius: 50%;
+      background: radial-gradient(circle at 38% 34%,
+        #edd070 0%, #c8960e 45%, #8a6008 100%);
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.18),
+                  0 0 0 3px rgba(200,165,108,0.15);
+    }
+    .wax-logo {
+      width: 50px; height: 50px; object-fit: contain;
+      mix-blend-mode: multiply; filter: brightness(0.45) sepia(0.2);
+    }
+
+    .letter-card {
+      position: absolute; left: 14px; right: 14px; top: 4px; bottom: 4px;
+      background: linear-gradient(155deg, var(--ivory-bright) 0%, #faf3e0 100%);
+      border: 1px solid var(--gold-light); border-radius: 1px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 5px; padding: 16px 22px;
+      transform: translateY(90px); opacity: 0; z-index: 6;
+    }
+    .letter-card::before {
+      content: ''; position: absolute; inset: 6px;
+      border: 0.5px solid rgba(200,165,108,0.45); pointer-events: none;
+    }
+
+    .lc-arch    { width: 170px; margin-bottom: 1px; }
+    .lc-bless   { font-family: var(--sc); font-size: 8px; letter-spacing: 0.22em; color: var(--gold); }
+    .lc-logo    { width: 60px; height: 60px; object-fit: contain; }
+    .lc-names   { font-family: var(--script); font-size: 26px; color: var(--brown); line-height: 1.2; }
+    .lc-divider { width: 170px; margin: 1px 0; }
+    .lc-date    { font-family: var(--sc); font-size: 10px; letter-spacing: 0.24em; color: var(--brown-mid); }
+
+    .scroll-hint {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      font-family: var(--sc); font-size: 10px;
+      letter-spacing: 0.4em; color: var(--gold-dim); text-transform: uppercase;
+    }
+    @keyframes trickle {
+      0%   { opacity: 0.2; height: 36px; }
+      50%  { opacity: 1;   height: 52px; }
+      100% { opacity: 0.2; height: 36px; }
+    }
+    .scroll-arrow {
+      width: 1px;
+      background: linear-gradient(to bottom, var(--gold-dim), transparent);
+      animation: trickle 2.4s ease-in-out infinite;
+    }
+
+    @media (max-width: 767px) {
+      .envelope       { width: 320px; height: 210px; }
+      .wax-seal, .wax-seal-disc { width: 54px; height: 54px; }
+      .wax-logo       { width: 36px; height: 36px; }
+      .letter-card    { left: 8px; right: 8px; padding: 10px 14px; }
+      .lc-logo        { width: 40px; height: 40px; }
+      .lc-names       { font-size: 17px; }
+      .lc-arch, .lc-divider { width: 110px; }
+      .env-fold-l { border-width: 105px 0 0 160px; }
+      .env-fold-r { border-width: 105px 160px 0 0; }
+    }
+
+    /* ── UNION ──────────────────────────────────────── */
+    #union {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 22px; padding: 110px 24px;
+      text-align: center; background: var(--ivory); overflow: hidden;
+    }
+    #union::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='5'%3E%3Crect width='5' height='5' fill='%23f5e9d2'/%3E%3Cline x1='0' y1='0' x2='5' y2='5' stroke='%23ead8b6' stroke-width='0.3' opacity='0.35'/%3E%3Cline x1='5' y1='0' x2='0' y2='5' stroke='%23ead8b6' stroke-width='0.3' opacity='0.35'/%3E%3C/svg%3E");
+      opacity: 0.7; pointer-events: none;
+    }
+
+    .monument {
+      position: absolute; bottom: 0;
+      width: 300px; height: 280px;
+      object-fit: contain; object-position: bottom;
+      opacity: 0.06; pointer-events: none;
+      filter: sepia(1) brightness(0.4);
+    }
+    .monument.left  { left: -40px; }
+    .monument.right { right: -40px; transform: scaleX(-1); }
+
+    .union-blessing {
+      font-family: var(--sc); font-size: 11px;
+      letter-spacing: 0.3em; color: var(--gold); position: relative;
+    }
+    .union-logo {
+      width: 180px; height: 180px; object-fit: contain;
+      opacity: 0; transform: translateY(24px); position: relative;
+    }
+    .union-names {
+      font-family: var(--script); font-size: 76px; font-weight: 400;
+      line-height: 1.1; opacity: 0; transform: translateY(24px); position: relative;
+    }
+    .union-pill {
+      display: inline-flex; align-items: center; gap: 14px;
+      opacity: 0; transform: translateY(14px);
+    }
+    .union-pill-text { font-family: var(--sc); font-size: 12px; letter-spacing: 0.22em; color: var(--gold); }
+    .union-pill-line      { width: 44px; height: 1px; background: linear-gradient(to right,  transparent, var(--gold)); }
+    .union-pill-line.r    { background: linear-gradient(to left, transparent, var(--gold)); }
+    .union-invite {
+      font-family: var(--serif); font-size: 19px; font-style: italic;
+      color: var(--brown-mid); line-height: 2.1; max-width: 420px;
+      opacity: 0; transform: translateY(18px); position: relative;
+    }
+    .union-hashtag {
+      font-family: var(--sc); font-size: 12px; letter-spacing: 0.22em;
+      color: var(--gold); opacity: 0; transform: translateY(14px); position: relative;
+    }
+
+    @media (max-width: 767px) {
+      .union-names  { font-size: 46px; }
+      .union-logo   { width: 130px; height: 130px; }
+      .union-invite { font-size: 17px; }
+      .monument     { width: 160px; height: 180px; }
+    }
+
+    /* ── COUPLE ─────────────────────────────────────── */
+    #couple {
+      position: relative; min-height: 80vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 60px; padding: 110px 24px;
+      background: var(--charcoal); overflow: hidden;
+    }
+    #couple::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 70% at 50% 50%,
+        rgba(200,165,108,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #couple .section-label { color: var(--on-dark-dim); }
+
     .couple-grid {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 40px;
-      align-items: center;
-      width: 100%;
-      max-width: 680px;
-      opacity: 0;
-      transform: translateY(20px);
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      gap: 52px; align-items: center;
+      width: 100%; max-width: 740px;
+      opacity: 0; transform: translateY(28px); position: relative;
     }
 
     .person {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      text-align: center;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 22px; text-align: center;
     }
 
+    .arch-frame {
+      position: relative; padding: 3px;
+      border-radius: 88px 88px 10px 10px;
+      background: linear-gradient(160deg,
+        var(--gold-bright) 0%, var(--gold-dim) 50%, var(--gold-bright) 100%);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(200,165,108,0.15);
+    }
     .portrait {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      background: var(--ivory-dark);
-      border: 2px solid var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 0 5px var(--ivory), 0 0 0 6px var(--gold-light),
-                  0 12px 40px rgba(42,30,18,0.12);
-      transition: box-shadow 0.4s ease;
+      width: 158px; height: 210px;
+      border-radius: 85px 85px 8px 8px;
+      background: linear-gradient(155deg, var(--charcoal-warm) 0%, #1e1508 100%);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
     }
-    .portrait:hover {
-      box-shadow: 0 0 0 5px var(--ivory), 0 0 0 6px var(--gold),
-                  0 16px 48px rgba(42,30,18,0.18);
-    }
+    .portrait-initial { font-family: var(--script); font-size: 88px; color: var(--gold-dim); line-height: 1; opacity: 0.75; }
 
-    .portrait:not([style*="background-image"]) .portrait-initial {
-      display: flex;
-    }
+    .person-name { font-family: var(--serif); font-size: 22px; font-weight: 400; font-style: italic; color: var(--on-dark); line-height: 1.35; }
+    .person-lineage { font-family: var(--sc); font-size: 11px; letter-spacing: 0.08em; color: var(--on-dark-dim); line-height: 2; }
 
-    .portrait-initial {
-      display: none;
-      font-family: var(--font-script);
-      font-size: 64px;
-      color: var(--gold);
-      line-height: 1;
-    }
-
-    .person-name {
-      font-family: var(--font-serif);
-      font-size: 22px;
-      font-weight: 400;
-      color: var(--brown);
-      line-height: 1.3;
-    }
-
-    .person-lineage {
-      font-family: var(--font-serif);
-      font-size: 14px;
-      font-style: italic;
-      color: var(--brown-mid);
-      line-height: 1.7;
-    }
-
-    .couple-divider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .divider-line-v { width: 2px; height: 120px; display: block; }
-    .divider-line-h { display: none; }
+    .couple-sep { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .csep-line  { width: 1px; height: 90px; background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent); }
+    .csep-gem   { width: 9px; height: 9px; background: var(--gold); transform: rotate(45deg); box-shadow: 0 0 10px rgba(200,165,108,0.45); }
+    .csep-hline { display: none; }
 
     @media (max-width: 767px) {
-      .couple-grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-        gap: 32px;
-      }
-      .couple-divider { width: 100%; }
-      .divider-line-v { display: none; }
-      .divider-line-h { display: block; width: 200px; height: 12px; }
-      .portrait { width: 130px; height: 130px; }
-      .portrait-initial { font-size: 52px; }
+      .couple-grid { grid-template-columns: 1fr; grid-template-rows: auto auto auto; gap: 36px; }
+      .couple-sep  { flex-direction: row; width: 100%; }
+      .csep-line   { display: none; }
+      .csep-hline  { display: block; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold-dim), transparent); }
+      .arch-frame  { padding: 2px; border-radius: 68px 68px 8px 8px; }
+      .portrait    { width: 130px; height: 172px; border-radius: 65px 65px 6px 6px; }
+      .portrait-initial { font-size: 66px; }
     }
 
-    /* ── Section 4: Events ───────────────────── */
+    /* ── EVENTS ─────────────────────────────────────── */
     #events {
-      padding: 80px 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 32px;
-      background: var(--ivory);
+      position: relative; padding: 110px 24px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 48px;
+      background: var(--ivory); overflow: hidden;
     }
+    #events::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='5'%3E%3Crect width='5' height='5' fill='%23f5e9d2'/%3E%3Cline x1='0' y1='0' x2='5' y2='5' stroke='%23ead8b6' stroke-width='0.3' opacity='0.35'/%3E%3Cline x1='5' y1='0' x2='0' y2='5' stroke='%23ead8b6' stroke-width='0.3' opacity='0.35'/%3E%3C/svg%3E");
+      opacity: 0.7; pointer-events: none;
+    }
+    #events .section-label { color: var(--gold-dim); }
 
-    .events-heading {
-      font-family: var(--font-script);
-      font-size: 48px;
-      color: var(--brown);
-      font-weight: 400;
-      line-height: 1;
-    }
+    .events-heading { font-family: var(--script); font-size: 58px; color: var(--brown); font-weight: 400; line-height: 1; position: relative; }
 
     .events-list {
-      width: 100%;
-      max-width: 720px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      width: 100%; max-width: 660px;
+      display: flex; flex-direction: column; gap: 20px; position: relative;
+    }
+    .events-list::before {
+      content: ''; position: absolute;
+      left: 50%; top: 28px; bottom: 28px; width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold-light) 8%, var(--gold-light) 92%, transparent);
+      transform: translateX(-50%);
     }
 
     .event-card {
+      width: calc(50% - 36px);
       background: var(--ivory-bright);
-      border: 1px solid var(--gold-light);
-      border-radius: 4px;
-      overflow: hidden;
-      border-left: 3px solid var(--gold);
-      box-shadow: 0 2px 12px rgba(42,30,18,0.05), 0 1px 4px rgba(42,30,18,0.04);
-      transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94),
-                  box-shadow 0.35s ease;
+      border: 1px solid var(--gold-light); border-radius: 3px;
+      overflow: hidden; opacity: 0; transform: translateY(20px); position: relative;
     }
-    .event-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 56px rgba(42,30,18,0.13), 0 6px 16px rgba(42,30,18,0.08);
-    }
+    .event-card:nth-child(odd)  { margin-right: auto; }
+    .event-card:nth-child(even) { margin-left:  auto; }
 
-    .event-card[data-accent="orange"] {
-      border-left-color: var(--orange);
+    .event-card::after {
+      content: ''; position: absolute; top: 22px;
+      width: 8px; height: 8px; background: var(--gold); border-radius: 50%;
+      box-shadow: 0 0 6px rgba(200,165,108,0.5);
     }
+    .event-card:nth-child(odd)::after  { right: -40px; }
+    .event-card:nth-child(even)::after { left:  -40px; }
 
-    .event-header {
-      padding: 20px 24px 12px;
-      border-bottom: 1px solid var(--gold-light);
-    }
+    .ev-inner { border-top: 3px solid var(--gold); padding: 18px 18px 20px; }
+    .event-card[data-accent="orange"] .ev-inner { border-top-color: var(--orange); }
 
-    .event-num {
-      font-family: var(--font-sc);
-      font-size: 10px;
-      letter-spacing: 0.25em;
-      color: var(--gold);
-      margin-bottom: 4px;
-    }
+    .ev-num   { font-family: var(--sc); font-size: 9px; letter-spacing: 0.32em; color: var(--gold); margin-bottom: 5px; }
+    .ev-name  { font-family: var(--serif); font-size: 18px; font-weight: 500; color: var(--brown); line-height: 1.3; }
+    .ev-sub   { font-size: 15px; font-weight: 300; font-style: italic; color: var(--brown-mid); }
+    .ev-when  { font-family: var(--sc); font-size: 10px; letter-spacing: 0.16em; color: var(--gold-dim); margin-top: 4px; margin-bottom: 12px; }
+    .ev-rule  { width: 100%; height: 1px; background: var(--gold-light); opacity: 0.6; margin-bottom: 12px; }
 
-    .event-name {
-      font-family: var(--font-serif);
-      font-size: 20px;
-      font-weight: 400;
-      color: var(--brown);
+    .ev-venue {
+      display: flex; align-items: flex-start; gap: 7px;
+      font-family: var(--serif); font-size: 12px; color: var(--brown-mid);
+      text-decoration: none; line-height: 1.55; margin-bottom: 10px; transition: color 0.2s;
     }
+    .ev-venue:hover { color: var(--gold); }
+    .ic-pin   { width: 12px; height: 12px; flex-shrink: 0; color: var(--gold); margin-top: 2px; }
 
-    .event-sub {
-      font-size: 16px;
-      font-style: italic;
-      color: var(--brown-mid);
-    }
-
-    .event-datetime {
-      font-family: var(--font-sc);
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      color: var(--brown-mid);
-      margin-top: 4px;
-    }
-
-    .event-body {
-      padding: 16px 24px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .event-venue {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      font-family: var(--font-serif);
-      font-size: 14px;
-      color: var(--brown-mid);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .event-venue:hover { color: var(--gold); }
-
-    .icon-pin, .icon-dress, .icon-suit {
-      width: 14px;
-      height: 14px;
-      flex-shrink: 0;
-      color: var(--gold);
-      margin-top: 2px;
-    }
-
-    .event-dress {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .dress-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      font-family: var(--font-serif);
-      font-size: 14px;
-      color: var(--brown-mid);
-    }
-
-    .event-note {
-      font-family: var(--font-serif);
-      font-size: 12px;
-      font-style: italic;
-      color: var(--brown-mid);
-      opacity: 0.7;
-      margin-top: 4px;
-    }
+    .ev-dress { display: flex; flex-direction: column; gap: 5px; }
+    .dr-row   { display: flex; align-items: flex-start; gap: 7px; font-family: var(--serif); font-size: 12px; color: var(--brown-mid); }
+    .ic-dress, .ic-suit { width: 12px; height: 12px; flex-shrink: 0; color: var(--gold); margin-top: 1px; }
+    .ev-note  { font-family: var(--serif); font-size: 11px; font-style: italic; color: var(--gold-dim); margin-top: 7px; }
 
     @media (max-width: 767px) {
-      .events-heading { font-size: 36px; }
-      .event-header { padding: 16px 16px 10px; }
-      .event-body { padding: 12px 16px 16px; }
+      .events-list::before { left: 14px; }
+      .event-card { width: 100%; }
+      .event-card:nth-child(even) { margin-left: 0; }
+      .event-card::after { left: 10px !important; right: auto !important; }
+      .ev-inner { padding-left: 36px; }
+      .events-heading { font-size: 42px; }
     }
 
-    /* ── Section 5: Countdown ────────────────── */
+    /* ── COUNTDOWN ──────────────────────────────────── */
     #countdown {
-      min-height: 60vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 32px;
-      padding: 80px 24px;
-      background: var(--ivory);
+      position: relative; min-height: 68vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 36px; padding: 100px 24px;
+      background: var(--charcoal); overflow: hidden;
     }
+    #countdown::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(200,165,108,0.05) 0%, transparent 72%);
+      pointer-events: none;
+    }
+    #countdown .section-label { color: var(--on-dark-dim); }
 
-    .countdown-display {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      position: relative;
-      padding: 40px 0;
+    .cd-wrap { display: flex; align-items: center; opacity: 0; transform: translateY(22px); }
+    .cd-unit { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 0 44px; }
+    .cd-num  {
+      font-family: var(--serif); font-size: 128px; font-weight: 300;
+      line-height: 1; letter-spacing: -0.02em; color: var(--gold);
+      min-width: 2ch; text-align: center;
+      text-shadow: 0 0 40px rgba(200,165,108,0.28), 0 0 80px rgba(200,165,108,0.12);
     }
-    .countdown-display::before,
-    .countdown-display::after {
-      content: '';
-      position: absolute;
-      left: 5%;
-      right: 5%;
-      height: 1px;
-      background: linear-gradient(90deg,
-        transparent 0%, var(--gold-light) 25%,
-        var(--gold) 50%,
-        var(--gold-light) 75%, transparent 100%);
-    }
-    .countdown-display::before { top: 0; }
-    .countdown-display::after  { bottom: 0; }
-
-    .countdown-unit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      padding: 0 36px;
-    }
-
-    .countdown-num {
-      font-family: var(--font-serif);
-      font-size: 96px;
-      font-weight: 300;
-      color: var(--gold);
-      line-height: 1;
-      letter-spacing: -0.02em;
-      min-width: 2ch;
-      text-align: center;
-    }
-
-    .countdown-label {
-      font-family: var(--font-sc);
-      font-size: 11px;
-      letter-spacing: 0.25em;
-      color: var(--brown-mid);
-      text-transform: uppercase;
-    }
-
-    .countdown-sep {
-      width: 1px;
-      height: 64px;
-      background: var(--gold-light);
-      flex-shrink: 0;
-    }
-
-    .countdown-caption {
-      font-family: var(--font-serif);
-      font-size: 14px;
-      font-style: italic;
-      color: var(--brown-mid);
-      letter-spacing: 0.04em;
-      opacity: 0;
-    }
+    .cd-label   { font-family: var(--sc); font-size: 10px; letter-spacing: 0.32em; color: var(--on-dark-dim); }
+    .cd-sep     { width: 1px; height: 78px; flex-shrink: 0; background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent); }
+    .cd-caption { font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--on-dark-dim); letter-spacing: 0.04em; opacity: 0; }
 
     @media (max-width: 767px) {
-      .countdown-num { font-size: 56px; }
-      .countdown-unit { padding: 0 8px; }
-      .countdown-sep { height: 40px; }
+      .cd-num  { font-size: 52px; }
+      .cd-unit { padding: 0 10px; }
+      .cd-sep  { height: 42px; }
     }
 
-    /* ── Section 6: Footer ───────────────────── */
+    /* ── FOOTER ─────────────────────────────────────── */
     #footer {
-      padding: 80px 24px 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      background: var(--ivory);
-      text-align: center;
+      position: relative; padding: 100px 24px 80px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 18px;
+      background: var(--charcoal-mid); text-align: center; overflow: hidden;
+    }
+    #footer::before {
+      content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 240px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
     }
 
-    .footer-logo {
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-      opacity: 0.85;
-      margin-bottom: 8px;
-    }
-
-    .footer-hashtag {
-      font-family: var(--font-script);
-      font-size: 48px;
-      line-height: 1.1;
-      background: linear-gradient(90deg, var(--gold) 0%, #e8c98a 40%, var(--gold) 100%);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: goldShimmer 4s linear infinite;
-    }
-
-    .footer-love {
-      font-family: var(--font-serif);
-      font-size: 16px;
-      font-style: italic;
-      color: var(--brown-mid);
-      line-height: 1.8;
-    }
-
-    .footer-cities {
-      font-style: normal;
-      font-family: var(--font-sc);
-      font-size: 13px;
-      letter-spacing: 0.15em;
-      color: var(--gold);
-    }
-
-    .footer-names {
-      font-family: var(--font-sc);
-      font-size: 14px;
-      letter-spacing: 0.2em;
-      color: var(--brown-mid);
-    }
-
-    .footer-date {
-      font-family: var(--font-sc);
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      color: var(--gold-light);
-    }
+    .footer-logo   { width: 86px; height: 86px; object-fit: contain; opacity: 0.45; margin-bottom: 4px; filter: sepia(1) brightness(1.2) saturate(0.6); }
+    .footer-hash   { font-family: var(--script); font-size: 58px; color: var(--gold); line-height: 1.1; }
+    .footer-love   { font-family: var(--serif); font-size: 16px; font-style: italic; color: var(--on-dark-dim); line-height: 2.1; }
+    .footer-cities { font-style: normal; font-family: var(--sc); font-size: 12px; letter-spacing: 0.22em; color: var(--gold-dim); }
+    .footer-names  { font-family: var(--sc); font-size: 13px; letter-spacing: 0.26em; color: var(--on-dark-dim); }
+    .footer-date   { font-family: var(--sc); font-size: 10px; letter-spacing: 0.24em; color: rgba(200,165,108,0.3); }
 
     @media (max-width: 767px) {
-      .footer-hashtag { font-size: 36px; }
-      .footer-logo { width: 80px; height: 80px; }
+      .footer-hash { font-size: 42px; }
+      .footer-logo { width: 68px; height: 68px; }
     }
 
-    /* ── Section separators ─────────────────── */
-    section + section,
-    section + footer {
-      border-top: 1px solid transparent;
-      border-image: linear-gradient(90deg,
-        transparent 0%, var(--gold-light) 25%,
-        var(--gold) 50%,
-        var(--gold-light) 75%, transparent 100%) 1;
+    section + section, section + footer, footer { border-top: none; }
+
+    /* Touch-active state for map links */
+    .ev-venue:active { color: var(--gold); }
+    a { touch-action: manipulation; }
+
+    /* ═══════════════════════════════════════════════════
+       MOBILE  (≤ 767px) — consolidated overrides
+    ═══════════════════════════════════════════════════ */
+    @media (max-width: 767px) {
+
+      /* Section vertical padding — desktop 110px is too tall on phones */
+      #union     { padding: 72px 20px; gap: 16px; min-height: auto; }
+      #couple    { padding: 72px 20px; gap: 40px; min-height: auto; }
+      #events    { padding: 72px 20px; gap: 32px; }
+      #countdown { padding: 72px 20px; gap: 28px; min-height: auto; }
+      #footer    { padding: 72px 20px 56px; gap: 14px; }
+
+      /* Couple section label spacing */
+      #couple .section-label { margin-bottom: -8px; }
+
+      /* Countdown — reduce numbers so all 4 fit in one row */
+      .cd-unit    { padding: 0 8px; gap: 8px; }
+      .cd-num     { font-size: 44px; }
+      .cd-sep     { height: 32px; }
+      .cd-caption { font-size: 13px; text-align: center; padding: 0 16px; }
+
+      /* Union invite line-height less airy on small screens */
+      .union-invite { line-height: 1.85; font-size: 17px; }
+
+      /* Events timeline node — fix left-side positioning */
+      .events-list::before { left: 14px; transform: none; }
+      .event-card          { width: 100%; margin-left: 0 !important; margin-right: 0 !important; }
+      .event-card::after   { left: 10px !important; right: auto !important; top: 18px; }
+      .ev-inner            { padding: 16px 16px 18px 36px; }
+
+      /* Touch target minimum height for venue links */
+      .ev-venue { min-height: 44px; align-items: center; padding: 4px 0; }
+      .dr-row   { min-height: 36px; align-items: center; }
+
+      /* Monument silhouettes overlap badly on narrow screens */
+      .monument { width: 130px; height: 150px; opacity: 0.045; }
+      .monument.left  { left: -20px; }
+      .monument.right { right: -20px; }
+
+      /* Footer sizing */
+      .footer-hash { font-size: 40px; }
+      .footer-logo { width: 64px; height: 64px; }
+      .footer-love { font-size: 15px; }
+
+      /* Envelope scene gap */
+      .envelope-scene { gap: 24px; }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       ULTRA-SMALL  (≤ 389px) — iPhone SE, Galaxy A-series
+    ═══════════════════════════════════════════════════ */
+    @media (max-width: 389px) {
+
+      /* Envelope shrinks further */
+      .envelope            { width: 288px; height: 188px; }
+      .env-fold-l          { border-width: 94px 0 0 144px; }
+      .env-fold-r          { border-width: 94px 144px 0 0; }
+      .wax-seal,
+      .wax-seal-disc       { width: 46px; height: 46px; }
+      .wax-logo            { width: 30px; height: 30px; }
+      .letter-card         { gap: 3px; padding: 8px 10px; }
+      .lc-logo             { width: 34px; height: 34px; }
+      .lc-names            { font-size: 15px; }
+      .lc-arch,
+      .lc-divider          { width: 88px; }
+      .lc-bless            { font-size: 7px; }
+
+      /* Union names */
+      .union-names  { font-size: 36px; }
+      .union-logo   { width: 110px; height: 110px; }
+      .union-invite { font-size: 16px; }
+
+      /* Couple portraits */
+      .arch-frame      { border-radius: 58px 58px 7px 7px; }
+      .portrait        { width: 112px; height: 148px; border-radius: 56px 56px 5px 5px; }
+      .portrait-initial{ font-size: 58px; }
+      .couple-grid     { gap: 28px; }
+
+      /* Events */
+      .events-heading  { font-size: 36px; }
+      .ev-name         { font-size: 16px; }
+      .ev-sub          { font-size: 13px; }
+
+      /* Countdown — tightest layout */
+      .cd-num  { font-size: 36px; }
+      .cd-unit { padding: 0 5px; gap: 6px; }
+      .cd-sep  { height: 24px; }
+
+      /* Footer */
+      .footer-hash { font-size: 34px; }
+      .footer-logo { width: 56px; height: 56px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Paper grain SVG filter — referenced by filter: url(#grain) -->
-  <svg class="grain-filter" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <filter id="grain" x="0%" y="0%" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" result="noise"/>
-        <feColorMatrix type="saturate" values="0" in="noise" result="grey"/>
-        <feBlend in="SourceGraphic" in2="grey" mode="multiply" result="blend"/>
-        <feComposite in="blend" in2="SourceGraphic" operator="in"/>
-      </filter>
-    </defs>
-  </svg>
+<!-- ── HERO ─────────────────────────────────────────── -->
+<section id="hero">
+  <div class="envelope-scene">
+    <div class="envelope">
+      <div class="env-fold-l" aria-hidden="true"></div>
+      <div class="env-fold-r" aria-hidden="true"></div>
+      <div class="env-body">
+        <div class="env-flap" aria-hidden="true"></div>
 
-  <!-- ══════════════════════════════════════════
-       SECTION 1 — ENVELOPE REVEAL (HERO)
-  ══════════════════════════════════════════ -->
-  <section id="hero">
-    <div class="envelope-scene">
-      <div class="envelope">
-        <div class="envelope-flap"></div>
-        <div class="envelope-body">
-          <div class="wax-seal">
-            <img class="wax-logo" src="logo.png" alt="KC" />
-          </div>
-          <!-- letter card inserted inside body so it clips correctly -->
-          <div class="letter-card" aria-hidden="true">
-            <!-- Nizami arch top motif -->
-            <svg class="arch-motif" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M10,38 Q10,8 100,4 Q190,8 190,38" stroke="#c9a87a" stroke-width="1"/>
-              <circle cx="100" cy="4" r="3" fill="#c9a87a" opacity="0.5"/>
-              <line x1="10" y1="38" x2="190" y2="38" stroke="#c9a87a" stroke-width="0.7"/>
-              <circle cx="45" cy="24" r="2" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
-              <circle cx="155" cy="24" r="2" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
-            </svg>
-
-            <p class="letter-blessing">॥ Shree Ganeshay Namah ॥</p>
-            <img class="letter-logo" src="logo.png" alt="KC" />
-            <p class="letter-names">Charu &amp; Koushik</p>
-
-            <!-- Rajasthani diamond-chain divider -->
-            <svg class="diamond-divider" viewBox="0 0 200 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <line x1="0" y1="6" x2="70" y2="6" stroke="#c9a87a" stroke-width="0.7"/>
-              <polygon points="80,6 86,2 92,6 86,10" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
-              <circle cx="100" cy="6" r="2.5" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
-              <polygon points="108,6 114,2 120,6 114,10" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
-              <line x1="130" y1="6" x2="200" y2="6" stroke="#c9a87a" stroke-width="0.7"/>
-            </svg>
-
-            <p class="letter-date">10 · 05 · 2026</p>
+        <div class="wax-seal" aria-label="KC wax seal">
+          <div class="wax-seal-disc">
+            <img class="wax-logo" src="logo.png" alt="KC monogram" />
           </div>
         </div>
+
+        <div class="letter-card" aria-hidden="true">
+          <svg class="lc-arch" viewBox="0 0 220 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8,44 Q8,5 110,2 Q212,5 212,44" stroke="#c8a56c" stroke-width="0.9"/>
+            <path d="M22,44 Q22,17 110,14 Q198,17 198,44" stroke="#c8a56c" stroke-width="0.4" opacity="0.4"/>
+            <circle cx="110" cy="2" r="3.2" fill="#c8a56c" opacity="0.55"/>
+            <circle cx="60"  cy="23" r="1.6" fill="none" stroke="#c8a56c" stroke-width="0.7"/>
+            <circle cx="160" cy="23" r="1.6" fill="none" stroke="#c8a56c" stroke-width="0.7"/>
+            <line x1="8" y1="44" x2="212" y2="44" stroke="#c8a56c" stroke-width="0.6"/>
+            <polygon points="84,44 88,40 92,44 88,48"   fill="none" stroke="#c8a56c" stroke-width="0.55"/>
+            <polygon points="128,44 132,40 136,44 132,48" fill="none" stroke="#c8a56c" stroke-width="0.55"/>
+          </svg>
+          <p class="lc-bless">&#2344;&#2358;&#2381;&#2352;&#2368; &#2327;&#2339;&#2375;&#2358;&#2366;&#2351; &#2344;&#2350;&#2307;</p>
+          <img class="lc-logo" src="logo.png" alt="KC" />
+          <p class="lc-names">Charu &amp; Koushik</p>
+          <svg class="lc-divider" viewBox="0 0 220 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0"   y1="6" x2="76"  y2="6" stroke="#c8a56c" stroke-width="0.65"/>
+            <polygon points="82,6 88,2 94,6 88,10"    fill="none" stroke="#c8a56c" stroke-width="0.75"/>
+            <circle  cx="110" cy="6" r="2.6"          fill="none" stroke="#c8a56c" stroke-width="0.75"/>
+            <polygon points="126,6 132,2 138,6 132,10" fill="none" stroke="#c8a56c" stroke-width="0.75"/>
+            <line x1="144" y1="6" x2="220" y2="6" stroke="#c8a56c" stroke-width="0.65"/>
+          </svg>
+          <p class="lc-date">10 &middot; 05 &middot; 2026</p>
+        </div>
       </div>
-      <p class="scroll-hint">
-        scroll to open
-        <svg class="scroll-arrow" viewBox="0 0 20 12" width="20" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="2,2 10,10 18,2"/>
-        </svg>
-      </p>
     </div>
-  </section>
 
-  <!-- ══════════════════════════════════════════
-       SECTION 2 — THE UNION (WELCOME)
-  ══════════════════════════════════════════ -->
-  <section id="union">
-    <p class="union-blessing">॥ Shree Ganeshay Namah ॥</p>
-
-    <img class="union-logo" src="logo.png" alt="Charu & Koushik" />
-
-    <h1 class="union-names">Charu &amp; Sri Ram Koushik</h1>
-
-    <p class="union-invite">
-      Together with their families,<br>
-      we joyfully invite you to<br>
-      celebrate our wedding.
+    <p class="scroll-hint">
+      scroll to open
+      <span class="scroll-arrow" aria-hidden="true"></span>
     </p>
+  </div>
+</section>
 
-    <p class="union-hashtag">#SRIgotCHARmed</p>
-  </section>
+<!-- ── UNION ─────────────────────────────────────────── -->
+<section id="union">
+  <img class="monument left"  src="hawa-mahal.png" alt="" aria-hidden="true" />
+  <img class="monument right" src="charminar.png"  alt="" aria-hidden="true" />
 
-  <!-- ══════════════════════════════════════════
-       SECTION 3 — BRIDE & GROOM
-  ══════════════════════════════════════════ -->
-  <section id="couple">
-    <p class="section-label">The Couple</p>
+  <p class="union-blessing">&#2404;&#2404; Shree Ganeshay Namah &#2404;&#2404;</p>
+  <img class="union-logo" src="logo.png" alt="Charu &amp; Koushik monogram" />
+  <h1 class="union-names shimmer">Charu &amp; Sri Ram Koushik</h1>
 
-    <div class="couple-grid">
-      <!-- Bride -->
-      <div class="person bride">
-        <div class="portrait" aria-label="Photo of Charu">
+  <div class="union-pill">
+    <span class="union-pill-line"></span>
+    <span class="union-pill-text">10 &middot; May &middot; 2026</span>
+    <span class="union-pill-line r"></span>
+  </div>
+
+  <p class="union-invite">
+    Together with their families,<br>
+    we joyfully invite you to<br>
+    celebrate our wedding.
+  </p>
+
+  <p class="union-hashtag">#SRIgotCHARmed</p>
+</section>
+
+<!-- ── COUPLE ────────────────────────────────────────── -->
+<section id="couple">
+  <p class="section-label">The Couple</p>
+  <div class="couple-grid">
+    <div class="person">
+      <div class="arch-frame">
+        <div class="portrait" aria-label="Charu">
           <span class="portrait-initial">C</span>
         </div>
-        <h2 class="person-name">Charu Gupta</h2>
-        <p class="person-lineage">D/o Sanjay Gupta<br>&amp; Sangeeta Gupta</p>
       </div>
+      <h2 class="person-name">Charu Gupta</h2>
+      <p class="person-lineage">D/o Sanjay Gupta<br>&amp; Sangeeta Gupta</p>
+    </div>
 
-      <div class="couple-divider" aria-hidden="true">
-        <svg class="divider-line-v" viewBox="0 0 2 120" xmlns="http://www.w3.org/2000/svg">
-          <line x1="1" y1="0" x2="1" y2="120" stroke="#c9a87a" stroke-width="1"/>
-        </svg>
-        <svg class="divider-line-h" viewBox="0 0 200 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="6" x2="70" y2="6" stroke="#c9a87a" stroke-width="0.7"/>
-          <polygon points="80,6 86,2 92,6 86,10" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
-          <circle cx="100" cy="6" r="2.5" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
-          <polygon points="108,6 114,2 120,6 114,10" fill="none" stroke="#c9a87a" stroke-width="0.8"/>
-          <line x1="130" y1="6" x2="200" y2="6" stroke="#c9a87a" stroke-width="0.7"/>
-        </svg>
-      </div>
+    <div class="couple-sep" aria-hidden="true">
+      <span class="csep-line"></span>
+      <span class="csep-hline"></span>
+      <span class="csep-gem"></span>
+      <span class="csep-line"></span>
+      <span class="csep-hline"></span>
+    </div>
 
-      <!-- Groom -->
-      <div class="person groom">
-        <div class="portrait" aria-label="Photo of Koushik">
+    <div class="person">
+      <div class="arch-frame">
+        <div class="portrait" aria-label="Koushik">
           <span class="portrait-initial">K</span>
         </div>
-        <h2 class="person-name">Sri Ram Koushik<br>Kadambari</h2>
-        <p class="person-lineage">S/o Vijay Kumar Kadambari<br>&amp; Lalitha Kadambari</p>
       </div>
+      <h2 class="person-name">Sri Ram Koushik<br>Kadambari</h2>
+      <p class="person-lineage">S/o Vijay Kumar Kadambari<br>&amp; Lalitha Kadambari</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ══════════════════════════════════════════
-       SECTION 4 — THE EVENTS
-  ══════════════════════════════════════════ -->
-  <section id="events">
-    <p class="section-label">The Celebrations</p>
-    <h2 class="events-heading">Join Us</h2>
+<!-- ── EVENTS ────────────────────────────────────────── -->
+<section id="events">
+  <p class="section-label">The Celebrations</p>
+  <h2 class="events-heading">Join Us</h2>
 
-    <div class="events-list">
+  <div class="events-list">
 
-      <div class="event-card" data-accent="gold">
-        <div class="event-header">
-          <p class="event-num">01</p>
-          <h3 class="event-name">Odugu <span class="event-sub">(Upanayanam)</span></h3>
-          <p class="event-datetime">9th May · 8:00 AM onwards</p>
+    <div class="event-card" data-accent="gold">
+      <div class="ev-inner">
+        <p class="ev-num">01</p>
+        <h3 class="ev-name">Odugu <span class="ev-sub">(Upanayanam)</span></h3>
+        <p class="ev-when">9th May &middot; 8:00 AM onwards</p>
+        <div class="ev-rule"></div>
+        <a class="ev-venue" href="https://maps.google.com/?q=Honer+Aquantis+Tellapur+Hyderabad" target="_blank" rel="noopener">
+          <svg class="ic-pin" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 13 5 13s5-9.25 5-13c0-2.76-2.24-5-5-5z"/><circle cx="8" cy="6" r="2"/></svg>
+          Honer Aquantis, Tellapur Rd, Gopanapalle, Hyderabad
+        </a>
+        <div class="ev-dress">
+          <span class="dr-row">
+            <svg class="ic-dress" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 1l3 4 3-4M2 20l2-8h8l2 8H2z"/><path d="M5 5l-3 7h12l-3-7"/></svg>
+            Saree / Dress / Lehenga &mdash; Pochampalli Print
+          </span>
+          <span class="dr-row">
+            <svg class="ic-suit" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 1l-3 5h3l1 3M11 1l3 5h-3l-1 3M7 9h2v11H7zM4 6l4 3 4-3"/></svg>
+            Kurta / Casual
+          </span>
         </div>
-        <div class="event-body">
-          <a class="event-venue" href="https://maps.google.com/?q=Honer+Aquantis+Tellapur+Hyderabad" target="_blank" rel="noopener">
-            <svg class="icon-pin" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 13 5 13s5-9.25 5-13c0-2.76-2.24-5-5-5z"/><circle cx="8" cy="6" r="2"/></svg>
-            Honer Aquantis, Tellapur Rd, Gopanapalle, Hyderabad
-          </a>
-          <div class="event-dress">
-            <span class="dress-row">
-              <svg class="icon-dress" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M5 1l3 4 3-4M2 20l2-8h8l2 8H2z"/><path d="M5 5l-3 7h12l-3-7"/></svg>
-              Saree / Dress / Lehenga — Pochampalli Print
-            </span>
-            <span class="dress-row">
-              <svg class="icon-suit" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M5 1l-3 5h3l1 3M11 1l3 5h-3l-1 3M7 9h2v11H7zM4 6l4 3 4-3"/></svg>
-              Kurta / Casual
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="event-card" data-accent="orange">
-        <div class="event-header">
-          <p class="event-num">02</p>
-          <h3 class="event-name">Carnigeet <span class="event-sub">(Carnival &amp; Sangeet)</span></h3>
-          <p class="event-datetime">9th May · 4:30 PM onwards</p>
-        </div>
-        <div class="event-body">
-          <a class="event-venue" href="https://maps.google.com/?q=Destinme+Vedika+Farms+Shankarpalli+Hyderabad" target="_blank" rel="noopener">
-            <svg class="icon-pin" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 13 5 13s5-9.25 5-13c0-2.76-2.24-5-5-5z"/><circle cx="8" cy="6" r="2"/></svg>
-            Destinme Vedika Farms, Shankarpalli Rd, Hyderabad
-          </a>
-          <div class="event-dress">
-            <span class="dress-row">
-              <svg class="icon-dress" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M5 1l3 4 3-4M2 20l2-8h8l2 8H2z"/><path d="M5 5l-3 7h12l-3-7"/></svg>
-              Indo-western / Lehenga · Colors &amp; Glam
-            </span>
-            <span class="dress-row">
-              <svg class="icon-suit" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M5 1l-3 5h3l1 3M11 1l3 5h-3l-1 3M7 9h2v11H7zM4 6l4 3 4-3"/></svg>
-              Indo-western / Suit
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="event-card" data-accent="gold">
-        <div class="event-header">
-          <p class="event-num">03</p>
-          <h3 class="event-name">Pre-wed Rituals <span class="event-sub">(Snathakam)</span></h3>
-          <p class="event-datetime">10th May · 8:00 AM onwards</p>
-        </div>
-        <div class="event-body">
-          <a class="event-venue" href="https://maps.google.com/?q=Silverwood+Convention+Shankarpalli+Hyderabad" target="_blank" rel="noopener">
-            <svg class="icon-pin" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 13 5 13s5-9.25 5-13c0-2.76-2.24-5-5-5z"/><circle cx="8" cy="6" r="2"/></svg>
-            Silverwood Convention &amp; Retreat, Shankarpalli Rd, Hyderabad
-          </a>
-          <div class="event-dress">
-            <span class="dress-row">
-              <svg class="icon-dress" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M5 1l3 4 3-4M2 20l2-8h8l2 8H2z"/><path d="M5 5l-3 7h12l-3-7"/></svg>
-              Saree / Half Saree (classic South Indian)
-            </span>
-            <span class="dress-row">
-              <svg class="icon-suit" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M5 1l-3 5h3l1 3M11 1l3 5h-3l-1 3M7 9h2v11H7zM4 6l4 3 4-3"/></svg>
-              Kurta / Shirt · Dhoti / Pancha
-            </span>
-          </div>
-          <p class="event-note">⊘ Beige / Cream is reserved for the bride</p>
-        </div>
-      </div>
-
-      <div class="event-card" data-accent="gold">
-        <div class="event-header">
-          <p class="event-num">04</p>
-          <h3 class="event-name">Baraat &amp; Eduru Sanaham</h3>
-          <p class="event-datetime">10th May · 4:00 PM onwards</p>
-        </div>
-        <div class="event-body">
-          <a class="event-venue" href="https://maps.google.com/?q=Silverwood+Convention+Shankarpalli+Hyderabad" target="_blank" rel="noopener">
-            <svg class="icon-pin" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 13 5 13s5-9.25 5-13c0-2.76-2.24-5-5-5z"/><circle cx="8" cy="6" r="2"/></svg>
-            Silverwood Convention &amp; Retreat, Shankarpalli Rd, Hyderabad
-          </a>
-          <div class="event-dress">
-            <span class="dress-row">
-              <svg class="icon-dress" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M5 1l3 4 3-4M2 20l2-8h8l2 8H2z"/><path d="M5 5l-3 7h12l-3-7"/></svg>
-              Fancy Saree
-            </span>
-            <span class="dress-row">
-              <svg class="icon-suit" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M5 1l-3 5h3l1 3M11 1l3 5h-3l-1 3M7 9h2v11H7zM4 6l4 3 4-3"/></svg>
-              Fancy Ethnic
-            </span>
-          </div>
-          <p class="event-note">⊘ Red / Orange is reserved for the bride</p>
-        </div>
-      </div>
-
-      <div class="event-card" data-accent="gold">
-        <div class="event-header">
-          <p class="event-num">05</p>
-          <h3 class="event-name">Wedding <span class="event-sub">(Sumuhurtham)</span></h3>
-          <p class="event-datetime">10th May · 8:00 PM · Muhurtham 10:32 PM</p>
-        </div>
-        <div class="event-body">
-          <a class="event-venue" href="https://maps.google.com/?q=Silverwood+Convention+Shankarpalli+Hyderabad" target="_blank" rel="noopener">
-            <svg class="icon-pin" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 13 5 13s5-9.25 5-13c0-2.76-2.24-5-5-5z"/><circle cx="8" cy="6" r="2"/></svg>
-            Silverwood Convention &amp; Retreat, Shankarpalli Rd, Hyderabad
-          </a>
-          <div class="event-dress">
-            <span class="dress-row">
-              <svg class="icon-dress" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M5 1l3 4 3-4M2 20l2-8h8l2 8H2z"/><path d="M5 5l-3 7h12l-3-7"/></svg>
-              Saree
-            </span>
-            <span class="dress-row">
-              <svg class="icon-suit" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M5 1l-3 5h3l1 3M11 1l3 5h-3l-1 3M7 9h2v11H7zM4 6l4 3 4-3"/></svg>
-              Ethnic
-            </span>
-          </div>
-          <p class="event-note">⊘ Red / Orange is reserved for the bride</p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       SECTION 5 — COUNTDOWN
-  ══════════════════════════════════════════ -->
-  <section id="countdown">
-    <p class="section-label">The Sumuhurtham begins in</p>
-
-    <div class="countdown-display" id="countdown-display">
-      <div class="countdown-unit">
-        <span class="countdown-num" id="cd-days">--</span>
-        <span class="countdown-label">Days</span>
-      </div>
-      <div class="countdown-sep" aria-hidden="true"></div>
-      <div class="countdown-unit">
-        <span class="countdown-num" id="cd-hours">--</span>
-        <span class="countdown-label">Hrs</span>
-      </div>
-      <div class="countdown-sep" aria-hidden="true"></div>
-      <div class="countdown-unit">
-        <span class="countdown-num" id="cd-mins">--</span>
-        <span class="countdown-label">Min</span>
-      </div>
-      <div class="countdown-sep" aria-hidden="true"></div>
-      <div class="countdown-unit">
-        <span class="countdown-num" id="cd-secs">--</span>
-        <span class="countdown-label">Sec</span>
       </div>
     </div>
 
-    <p class="countdown-caption">
-      10th May 2026 · 10:32 PM IST · Silverwood, Hyderabad
-    </p>
-  </section>
+    <div class="event-card" data-accent="orange">
+      <div class="ev-inner">
+        <p class="ev-num">02</p>
+        <h3 class="ev-name">Carnigeet <span class="ev-sub">(Carnival &amp; Sangeet)</span></h3>
+        <p class="ev-when">9th May &middot; 4:30 PM onwards</p>
+        <div class="ev-rule"></div>
+        <a class="ev-venue" href="https://maps.google.com/?q=Destinme+Vedika+Farms+Shankarpalli+Hyderabad" target="_blank" rel="noopener">
+          <svg class="ic-pin" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 13 5 13s5-9.25 5-13c0-2.76-2.24-5-5-5z"/><circle cx="8" cy="6" r="2"/></svg>
+          Destinme Vedika Farms, Shankarpalli Rd, Hyderabad
+        </a>
+        <div class="ev-dress">
+          <span class="dr-row">
+            <svg class="ic-dress" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 1l3 4 3-4M2 20l2-8h8l2 8H2z"/><path d="M5 5l-3 7h12l-3-7"/></svg>
+            Indo-western / Lehenga &middot; Colors &amp; Glam
+          </span>
+          <span class="dr-row">
+            <svg class="ic-suit" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 1l-3 5h3l1 3M11 1l3 5h-3l-1 3M7 9h2v11H7zM4 6l4 3 4-3"/></svg>
+            Indo-western / Suit
+          </span>
+        </div>
+      </div>
+    </div>
 
-  <!-- ══════════════════════════════════════════
-       SECTION 6 — FOOTER
-  ══════════════════════════════════════════ -->
-  <footer id="footer">
-    <img class="footer-logo" src="logo.png" alt="" aria-hidden="true" />
+    <div class="event-card" data-accent="gold">
+      <div class="ev-inner">
+        <p class="ev-num">03</p>
+        <h3 class="ev-name">Pre-wed Rituals <span class="ev-sub">(Snathakam)</span></h3>
+        <p class="ev-when">10th May &middot; 8:00 AM onwards</p>
+        <div class="ev-rule"></div>
+        <a class="ev-venue" href="https://maps.google.com/?q=Silverwood+Convention+Shankarpalli+Hyderabad" target="_blank" rel="noopener">
+          <svg class="ic-pin" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 13 5 13s5-9.25 5-13c0-2.76-2.24-5-5-5z"/><circle cx="8" cy="6" r="2"/></svg>
+          Silverwood Convention &amp; Retreat, Shankarpalli Rd, Hyderabad
+        </a>
+        <div class="ev-dress">
+          <span class="dr-row">
+            <svg class="ic-dress" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 1l3 4 3-4M2 20l2-8h8l2 8H2z"/><path d="M5 5l-3 7h12l-3-7"/></svg>
+            Saree / Half Saree (classic South Indian)
+          </span>
+          <span class="dr-row">
+            <svg class="ic-suit" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 1l-3 5h3l1 3M11 1l3 5h-3l-1 3M7 9h2v11H7zM4 6l4 3 4-3"/></svg>
+            Kurta / Shirt &middot; Dhoti / Pancha
+          </span>
+        </div>
+        <p class="ev-note">&#8856; Beige / Cream is reserved for the bride</p>
+      </div>
+    </div>
 
-    <p class="footer-hashtag">#SRIgotCHARmed</p>
+    <div class="event-card" data-accent="gold">
+      <div class="ev-inner">
+        <p class="ev-num">04</p>
+        <h3 class="ev-name">Baraat &amp; Eduru Sanaham</h3>
+        <p class="ev-when">10th May &middot; 4:00 PM onwards</p>
+        <div class="ev-rule"></div>
+        <a class="ev-venue" href="https://maps.google.com/?q=Silverwood+Convention+Shankarpalli+Hyderabad" target="_blank" rel="noopener">
+          <svg class="ic-pin" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 13 5 13s5-9.25 5-13c0-2.76-2.24-5-5-5z"/><circle cx="8" cy="6" r="2"/></svg>
+          Silverwood Convention &amp; Retreat, Shankarpalli Rd, Hyderabad
+        </a>
+        <div class="ev-dress">
+          <span class="dr-row">
+            <svg class="ic-dress" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 1l3 4 3-4M2 20l2-8h8l2 8H2z"/><path d="M5 5l-3 7h12l-3-7"/></svg>
+            Fancy Saree
+          </span>
+          <span class="dr-row">
+            <svg class="ic-suit" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 1l-3 5h3l1 3M11 1l3 5h-3l-1 3M7 9h2v11H7zM4 6l4 3 4-3"/></svg>
+            Fancy Ethnic
+          </span>
+        </div>
+        <p class="ev-note">&#8856; Red / Orange is reserved for the bride</p>
+      </div>
+    </div>
 
-    <p class="footer-love">
-      With love from both our families<br>
-      <span class="footer-cities">Hyderabad &amp; Jaipur</span>
-    </p>
+    <div class="event-card" data-accent="gold">
+      <div class="ev-inner">
+        <p class="ev-num">05</p>
+        <h3 class="ev-name">Wedding <span class="ev-sub">(Sumuhurtham)</span></h3>
+        <p class="ev-when">10th May &middot; 8:00 PM &middot; Muhurtham 10:32 PM</p>
+        <div class="ev-rule"></div>
+        <a class="ev-venue" href="https://maps.google.com/?q=Silverwood+Convention+Shankarpalli+Hyderabad" target="_blank" rel="noopener">
+          <svg class="ic-pin" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 13 5 13s5-9.25 5-13c0-2.76-2.24-5-5-5z"/><circle cx="8" cy="6" r="2"/></svg>
+          Silverwood Convention &amp; Retreat, Shankarpalli Rd, Hyderabad
+        </a>
+        <div class="ev-dress">
+          <span class="dr-row">
+            <svg class="ic-dress" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 1l3 4 3-4M2 20l2-8h8l2 8H2z"/><path d="M5 5l-3 7h12l-3-7"/></svg>
+            Saree
+          </span>
+          <span class="dr-row">
+            <svg class="ic-suit" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 1l-3 5h3l1 3M11 1l3 5h-3l-1 3M7 9h2v11H7zM4 6l4 3 4-3"/></svg>
+            Ethnic
+          </span>
+        </div>
+        <p class="ev-note">&#8856; Red / Orange is reserved for the bride</p>
+      </div>
+    </div>
 
-    <p class="footer-names">Charu &amp; Sri Ram Koushik</p>
-    <p class="footer-date">10 · 05 · 2026</p>
-  </footer>
+  </div>
+</section>
 
-  <script>
-    gsap.registerPlugin(ScrollTrigger);
+<!-- ── COUNTDOWN ─────────────────────────────────────── -->
+<section id="countdown">
+  <p class="section-label">The Sumuhurtham begins in</p>
+
+  <div class="cd-wrap" id="countdown-display">
+    <div class="cd-unit">
+      <span class="cd-num" id="cd-days">--</span>
+      <span class="cd-label">Days</span>
+    </div>
+    <div class="cd-sep" aria-hidden="true"></div>
+    <div class="cd-unit">
+      <span class="cd-num" id="cd-hours">--</span>
+      <span class="cd-label">Hrs</span>
+    </div>
+    <div class="cd-sep" aria-hidden="true"></div>
+    <div class="cd-unit">
+      <span class="cd-num" id="cd-mins">--</span>
+      <span class="cd-label">Min</span>
+    </div>
+    <div class="cd-sep" aria-hidden="true"></div>
+    <div class="cd-unit">
+      <span class="cd-num" id="cd-secs">--</span>
+      <span class="cd-label">Sec</span>
+    </div>
+  </div>
+
+  <p class="cd-caption">
+    10th May 2026 &middot; 10:32 PM IST &middot; Silverwood, Hyderabad
+  </p>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────── -->
+<footer id="footer">
+  <img class="footer-logo" src="logo.png" alt="" aria-hidden="true" />
+  <p class="footer-hash">#SRIgotCHARmed</p>
+  <p class="footer-love">
+    With love from both our families<br>
+    <span class="footer-cities">Hyderabad &amp; Jaipur</span>
+  </p>
+  <p class="footer-names">Charu &amp; Sri Ram Koushik</p>
+  <p class="footer-date">10 &middot; 05 &middot; 2026</p>
+</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* normalizeScroll helps mobile but can fight iOS momentum — only enable on touch */
+  var isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    ScrollTrigger.normalizeScroll({ allowNestedScroll: true });
+  } else {
     ScrollTrigger.normalizeScroll(true);
+  }
 
-    /* ── Envelope reveal ─────────────────────── */
-    const envelopeTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#hero',
-        start: 'top top',
-        end: '+=300%',
-        scrub: 1,
-        pin: true,
-        anticipatePin: 1,
-      }
+  /* Floating petals */
+  (function () {
+    var hero   = document.getElementById('hero');
+    var colors = ['#d46820','#c85428','#e07030','#cc5c28','#e88840'];
+    var count  = isMobile ? 10 : 22;   /* fewer on mobile for performance */
+    for (var i = 0; i < count; i++) {
+      var el   = document.createElement('div');
+      el.className = 'petal';
+      var size = 5 + Math.random() * 9;
+      var left = Math.random() * 100;
+      var dur  = 8 + Math.random() * 9;
+      var dly  = Math.random() * 12;
+      var sway = ((Math.random() - 0.5) * 220).toFixed(0);
+      var spin = 360 + Math.floor(Math.random() * 360);
+      var col  = colors[i % colors.length];
+      el.style.cssText =
+        'left:' + left + '%;top:-30px;' +
+        'width:' + size + 'px;height:' + (size * 1.5).toFixed(0) + 'px;' +
+        'background:' + col + ';opacity:0.7;' +
+        '--dur:' + dur + 's;--dly:' + dly + 's;' +
+        '--sway:' + sway + 'px;--spin:' + spin + 'deg;';
+      hero.appendChild(el);
+    }
+  })();
+
+  /* Gold bokeh */
+  (function () {
+    var hero = document.getElementById('hero');
+    var count = isMobile ? 8 : 18;
+    for (var i = 0; i < count; i++) {
+      var el = document.createElement('div');
+      el.className = 'bokeh';
+      var sz = 1.5 + Math.random() * 4;
+      el.style.cssText =
+        'left:' + (8 + Math.random() * 84) + '%;' +
+        'top:'  + (8 + Math.random() * 84) + '%;' +
+        'width:' + sz + 'px;height:' + sz + 'px;' +
+        'filter:blur(' + (sz * 0.5).toFixed(1) + 'px);' +
+        '--bd:'  + (4 + Math.random() * 5) + 's;' +
+        '--bdly:' + (Math.random() * 4) + 's;' +
+        '--bop:' + (0.08 + Math.random() * 0.18).toFixed(2) + ';';
+      hero.appendChild(el);
+    }
+  })();
+
+  /* Envelope reveal */
+  var envTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#hero',
+      start: 'top top',
+      end: '+=300%',
+      scrub: isMobile ? 0.8 : 1.2,  /* snappier on touch */
+      pin: true,
+      anticipatePin: 1,
+      preventOverlaps: true,
+      fastScrollEnd: true
+    }
+  });
+
+  envTl
+    .to('.scroll-hint', { opacity: 0, duration: 0.12, ease: 'none' }, 0)
+    .to('.wax-seal',    { opacity: 0, scale: 0.88, duration: 0.06, ease: 'none' }, 0.28)
+    .to('.env-flap',    { rotateX: -182, duration: 0.32, ease: 'none' }, 0.36)
+    .to('.letter-card', { y: -72, opacity: 1, duration: 0.34, ease: 'none' }, 0.66);
+
+  /* Scroll start thresholds — fire earlier on short mobile viewports */
+  var startSoon  = isMobile ? 'top 95%' : 'top 80%';
+  var startMid   = isMobile ? 'top 98%' : 'top 86%';
+  var startLate  = isMobile ? 'top 95%' : 'top 72%';
+  var startCards = isMobile ? 'top 99%' : 'top 90%';
+
+  /* Union */
+  gsap.to('.union-logo', {
+    opacity: 1, y: 0, duration: 1.1, ease: 'power2.out',
+    scrollTrigger: { trigger: '#union', start: startSoon }
+  });
+
+  ['.union-names', '.union-pill', '.union-invite', '.union-hashtag'].forEach(function (sel, i) {
+    gsap.to(sel, {
+      opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: i * 0.1,
+      scrollTrigger: { trigger: sel, start: startMid }
     });
+  });
 
-    envelopeTl
-      /* 0–15%: scroll hint fades out */
-      .to('.scroll-hint', { opacity: 0, duration: 0.15, ease: 'none' }, 0)
-      /* 35–40%: seal fades out before flap opens */
-      .to('.wax-seal', { opacity: 0, duration: 0.05, ease: 'none' }, 0.35)
-      /* 40–70%: flap rotates open */
-      .to('.envelope-flap', {
-        rotateX: -180,
-        duration: 0.3,
-        ease: 'none',
-      }, 0.4)
-      /* 70–100%: letter card rises and fades in */
-      .to('.letter-card', {
-        y: -60,
-        opacity: 1,
-        duration: 0.3,
-        ease: 'none',
-      }, 0.7);
+  /* Couple */
+  gsap.to('.couple-grid', {
+    opacity: 1, y: 0, duration: 1.05, ease: 'power2.out',
+    scrollTrigger: { trigger: '#couple', start: startLate }
+  });
 
-    /* ── Section 2: The Union — entrance animations ── */
-    gsap.fromTo('.union-logo',
-      { opacity: 0, y: 28, scale: 0.93 },
-      {
-        opacity: 1, y: 0, scale: 1,
-        duration: 1.3, ease: 'power3.out',
-        scrollTrigger: { trigger: '#union', start: 'top 78%' },
-        onComplete() {
-          gsap.to('.union-logo', {
-            y: -8, repeat: -1, yoyo: true,
-            duration: 3.5, ease: 'sine.inOut',
-          });
-        },
-      }
+  /* Events */
+  document.querySelectorAll('.event-card').forEach(function (card, i) {
+    var fromLeft = i % 2 === 0;
+    gsap.fromTo(card,
+      { opacity: 0, y: isMobile ? 12 : 22, x: isMobile ? 0 : (fromLeft ? -18 : 18) },
+      { opacity: 1, y: 0, x: 0, duration: 0.82, ease: 'power2.out',
+        scrollTrigger: { trigger: card, start: startCards } }
     );
+  });
 
-    gsap.utils.toArray(['.union-blessing', '.union-names', '.union-invite', '.union-hashtag'])
-      .forEach((el, i) => {
-        gsap.fromTo(el,
-          { opacity: 0, y: 30, scale: 0.97 },
-          {
-            opacity: 1, y: 0, scale: 1,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: { trigger: el, start: 'top 88%' },
-            delay: i * 0.13,
-            clearProps: 'transform,scale',
-          }
-        );
-      });
-
-    /* ── Section 3: Bride & Groom ── */
-    gsap.fromTo('.couple-grid',
-      { opacity: 0, y: 30, scale: 0.97 },
-      {
-        opacity: 1, y: 0, scale: 1,
-        duration: 1.1, ease: 'power3.out',
-        scrollTrigger: { trigger: '#couple', start: 'top 75%' },
-        clearProps: 'transform,scale',
+  /* Countdown */
+  (function () {
+    var TARGET = new Date('2026-05-10T22:32:00+05:30').getTime();
+    function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
+    var timerId;
+    function tick() {
+      var diff = TARGET - Date.now();
+      if (diff <= 0) {
+        clearInterval(timerId);
+        document.getElementById('countdown-display').innerHTML =
+          '<p style="font-family:var(--script);font-size:42px;color:var(--gold)">The celebration has begun ✶</p>';
+        return;
       }
-    );
+      document.getElementById('cd-days').textContent  = pad(Math.floor(diff / 86400000));
+      document.getElementById('cd-hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+      document.getElementById('cd-mins').textContent  = pad(Math.floor((diff % 3600000)  / 60000));
+      document.getElementById('cd-secs').textContent  = pad(Math.floor((diff % 60000)    / 1000));
+    }
+    tick();
+    timerId = setInterval(tick, 1000);
+  })();
 
-    /* ── Section 4: Events — stagger in ── */
-    gsap.utils.toArray('.event-card').forEach((card, i) => {
-      gsap.fromTo(card,
-        { opacity: 0, y: 24 },
-        {
-          opacity: 1, y: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: card, start: 'top 90%' },
-          delay: i * 0.09,
-          clearProps: 'transform,opacity',
-        }
-      );
-    });
-
-    /* ── Section 5: Countdown ── */
-    (function () {
-      const TARGET = new Date('2026-05-10T22:32:00+05:30').getTime();
-
-      function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
-
-      var timerId;
-
-      function updateCountdown() {
-        const now = Date.now();
-        const diff = TARGET - now;
-
-        if (diff <= 0) {
-          clearInterval(timerId);
-          document.getElementById('countdown-display').innerHTML =
-            '<p style="font-family:var(--font-script);font-size:36px;color:var(--gold)">The celebration has begun ✦</p>';
-          return;
-        }
-
-        const days  = Math.floor(diff / 86400000);
-        const hours = Math.floor((diff % 86400000) / 3600000);
-        const mins  = Math.floor((diff % 3600000)  / 60000);
-        const secs  = Math.floor((diff % 60000)    / 1000);
-
-        document.getElementById('cd-days').textContent  = pad(days);
-        document.getElementById('cd-hours').textContent = pad(hours);
-        document.getElementById('cd-mins').textContent  = pad(mins);
-        document.getElementById('cd-secs').textContent  = pad(secs);
-      }
-
-      updateCountdown();
-      timerId = setInterval(updateCountdown, 1000);
-    })();
-
-    gsap.fromTo('.countdown-display',
-      { opacity: 0, y: 24, scale: 0.97 },
-      {
-        opacity: 1, y: 0, scale: 1,
-        duration: 1.1, ease: 'power3.out',
-        scrollTrigger: { trigger: '#countdown', start: 'top 75%' },
-        clearProps: 'transform,scale',
-      }
-    );
-    gsap.fromTo('.countdown-caption',
-      { opacity: 0, y: 12 },
-      {
-        opacity: 1, y: 0,
-        duration: 0.9, ease: 'power2.out', delay: 0.25,
-        scrollTrigger: { trigger: '#countdown', start: 'top 75%' },
-        clearProps: 'transform',
-      }
-    );
-
-    /* ── Page load fade-in ── */
-    gsap.to('body', { opacity: 1, duration: 0.9, ease: 'power1.out', delay: 0.05 });
-  </script>
-
+  var startCount = isMobile ? 'top 98%' : 'top 75%';
+  gsap.to('.cd-wrap', {
+    opacity: 1, y: 0, duration: 1, ease: 'power2.out',
+    scrollTrigger: { trigger: '#countdown', start: startCount }
+  });
+  gsap.to('.cd-caption', {
+    opacity: 1, duration: 1, ease: 'power2.out', delay: 0.3,
+    scrollTrigger: { trigger: '#countdown', start: startCount }
+  });
+</script>
 </body>
 </html>
