@@ -284,6 +284,36 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
     ScrollTrigger.normalizeScroll(true);
+
+    /* ── Envelope reveal ─────────────────────── */
+    const envelopeTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: '+=300%',
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1,
+      }
+    });
+
+    envelopeTl
+      /* 0–15%: scroll hint fades out */
+      .to('.scroll-hint', { opacity: 0, duration: 0.15, ease: 'none' }, 0)
+      /* 40–70%: flap rotates open, seal pulse stops */
+      .to('.wax-seal', { animation: 'none', duration: 0.01 }, 0.39)
+      .to('.envelope-flap', {
+        rotateX: -180,
+        duration: 0.3,
+        ease: 'none',
+      }, 0.4)
+      /* 70–100%: letter card rises and fades in */
+      .to('.letter-card', {
+        y: -80,
+        opacity: 1,
+        duration: 0.3,
+        ease: 'none',
+      }, 0.7);
   </script>
 
 </body>
