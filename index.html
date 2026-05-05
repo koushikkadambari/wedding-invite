@@ -25,7 +25,7 @@
       --charcoal:     #0c0905;
       --charcoal-mid: #181209;
       --charcoal-warm:#241a0e;
-      --gold:         #c8a56c;
+      --gold:         #9a7030;
       --gold-bright:  #e0c076;
       --gold-dim:     #9a7840;
       --gold-light:   #e4ceaa;
@@ -111,16 +111,13 @@
     }
 
     .envelope-scene {
-      position: relative; z-index: 5;
-      display: flex; flex-direction: column; align-items: center;
-      gap: 36px; perspective: 1200px;
+      position: absolute; inset: 0; z-index: 5;
+      perspective: 2200px;
     }
 
     .envelope {
-      position: relative; width: 540px; height: 352px;
+      position: absolute; inset: 0;
       transform-style: preserve-3d;
-      filter: drop-shadow(0 48px 120px rgba(0,0,0,0.6))
-              drop-shadow(0 4px 24px rgba(200,165,108,0.18));
     }
 
     .env-body {
@@ -149,9 +146,9 @@
       position: absolute; bottom: 0;
       border-style: solid; z-index: 1; pointer-events: none;
     }
-    .env-fold-l { left: 0; border-width: 176px 0 0 270px;
+    .env-fold-l { left: 0; border-width: 50vh 0 0 50vw;
       border-color: transparent transparent transparent rgba(0,0,0,0.05); }
-    .env-fold-r { right: 0; border-width: 176px 270px 0 0;
+    .env-fold-r { right: 0; border-width: 50vh 50vw 0 0;
       border-color: transparent rgba(0,0,0,0.05) transparent transparent; }
 
     .env-flap {
@@ -172,7 +169,7 @@
     .wax-seal {
       position: absolute; top: 50%; left: 50%;
       transform: translate(-50%,-50%);
-      width: 76px; height: 76px; z-index: 12;
+      width: 120px; height: 120px; z-index: 12;
       animation: sealBreath 3.5s ease-in-out infinite;
     }
     @keyframes sealBreath {
@@ -180,7 +177,7 @@
       50%       { transform: translate(-50%,-50%) scale(1.035); }
     }
     .wax-seal-disc {
-      width: 76px; height: 76px; border-radius: 50%;
+      width: 120px; height: 120px; border-radius: 50%;
       background: radial-gradient(circle at 38% 34%,
         #edd070 0%, #c8960e 45%, #8a6008 100%);
       border: 1px solid rgba(255,255,255,0.15);
@@ -189,35 +186,42 @@
                   0 0 0 3px rgba(200,165,108,0.15);
     }
     .wax-logo {
-      width: 50px; height: 50px; object-fit: contain;
+      width: 80px; height: 80px; object-fit: contain;
       mix-blend-mode: multiply; filter: brightness(0.45) sepia(0.2);
     }
 
     .letter-card {
-      position: absolute; left: 14px; right: 14px; top: 4px; bottom: 4px;
+      position: absolute;
+      width: min(720px, calc(100% - 60px));
+      left: 0; right: 0; margin: 0 auto;
+      top: auto; bottom: 0;
+      height: 460px;
       background: linear-gradient(155deg, var(--ivory-bright) 0%, #faf3e0 100%);
       border: 1px solid var(--gold-light); border-radius: 1px;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 5px; padding: 16px 22px;
-      transform: translateY(90px); opacity: 0; z-index: 6;
+      gap: 12px; padding: 36px 40px;
+      transform: translateY(580px); opacity: 0; z-index: 6;
     }
     .letter-card::before {
       content: ''; position: absolute; inset: 6px;
       border: 0.5px solid rgba(200,165,108,0.45); pointer-events: none;
     }
 
-    .lc-arch    { width: 170px; margin-bottom: 1px; }
-    .lc-bless   { font-family: var(--sc); font-size: 8px; letter-spacing: 0.22em; color: var(--gold); }
-    .lc-logo    { width: 60px; height: 60px; object-fit: contain; }
-    .lc-names   { font-family: var(--script); font-size: 26px; color: var(--brown); line-height: 1.2; }
-    .lc-divider { width: 170px; margin: 1px 0; }
-    .lc-date    { font-family: var(--sc); font-size: 10px; letter-spacing: 0.24em; color: var(--brown-mid); }
+    .lc-arch    { width: 280px; margin-bottom: 4px; }
+    .lc-bless   { font-family: var(--sc); font-size: 12px; letter-spacing: 0.26em; color: var(--gold); }
+    .lc-logo    { width: 100px; height: 100px; object-fit: contain; }
+    .lc-names   { font-family: var(--script); font-size: 52px; color: var(--brown); line-height: 1.15; }
+    .lc-divider { width: 280px; margin: 4px 0; }
+    .lc-date    { font-family: var(--sc); font-size: 13px; letter-spacing: 0.32em; color: var(--brown-mid); }
 
     .scroll-hint {
+      position: absolute; bottom: 44px; left: 50%; transform: translateX(-50%);
+      z-index: 20;
       display: flex; flex-direction: column; align-items: center; gap: 10px;
       font-family: var(--sc); font-size: 10px;
       letter-spacing: 0.4em; color: var(--gold-dim); text-transform: uppercase;
+      white-space: nowrap;
     }
     @keyframes trickle {
       0%   { opacity: 0.2; height: 36px; }
@@ -231,21 +235,14 @@
     }
 
     @media (max-width: 767px) {
-      .envelope       { width: 350px; height: 228px; }
-      .env-body       { overflow: visible; } /* let card rise above envelope */
-      .wax-seal, .wax-seal-disc { width: 60px; height: 60px; }
-      .wax-logo       { width: 40px; height: 40px; }
-      .letter-card    {
-        left: 8px; right: 8px; padding: 14px 18px; gap: 8px;
-        box-shadow: 0 -12px 40px rgba(0,0,0,0.25), 0 4px 16px rgba(0,0,0,0.1);
-      }
-      .lc-arch, .lc-divider { display: none; } /* remove decorative SVGs — save space */
-      .lc-logo        { width: 56px; height: 56px; }
-      .lc-names       { font-size: 28px; }
+      .wax-seal, .wax-seal-disc { width: 80px; height: 80px; }
+      .wax-logo       { width: 54px; height: 54px; }
+      .letter-card    { height: 380px; padding: 24px 28px; gap: 10px; }
+      .lc-arch, .lc-divider { display: none; }
+      .lc-logo        { width: 76px; height: 76px; }
+      .lc-names       { font-size: 38px; }
       .lc-bless       { font-size: 9px; }
-      .lc-date        { font-size: 12px; letter-spacing: 0.2em; }
-      .env-fold-l { border-width: 114px 0 0 175px; }
-      .env-fold-r { border-width: 114px 175px 0 0; }
+      .lc-date        { font-size: 11px; }
     }
 
     /* ── UNION ──────────────────────────────────────── */
@@ -491,14 +488,14 @@
     }
 
     .footer-logo   { width: 86px; height: 86px; object-fit: contain; opacity: 0.45; margin-bottom: 4px; filter: sepia(1) brightness(1.2) saturate(0.6); }
-    .footer-hash   { font-family: var(--script); font-size: 58px; color: var(--gold); line-height: 1.1; }
+    .footer-hash   { font-family: var(--sc); font-size: 36px; letter-spacing: 0.1em; color: var(--gold); line-height: 1.4; }
     .footer-love   { font-family: var(--serif); font-size: 16px; font-style: italic; color: var(--on-dark-dim); line-height: 2.1; }
     .footer-cities { font-style: normal; font-family: var(--sc); font-size: 12px; letter-spacing: 0.22em; color: var(--gold-dim); }
     .footer-names  { font-family: var(--sc); font-size: 13px; letter-spacing: 0.26em; color: var(--on-dark-dim); }
     .footer-date   { font-family: var(--sc); font-size: 10px; letter-spacing: 0.24em; color: rgba(200,165,108,0.3); }
 
     @media (max-width: 767px) {
-      .footer-hash { font-size: 42px; }
+      .footer-hash { font-size: 22px; }
       .footer-logo { width: 68px; height: 68px; }
     }
 
@@ -542,12 +539,12 @@
       .ev-venue { min-height: 44px; align-items: center; padding: 4px 0; }
       .dr-row   { min-height: 36px; align-items: center; }
 
-      /* Disable shimmer animation — -webkit-background-clip:text + infinite animation crashes iOS WebKit */
+      /* Disable shimmer — crash prevention + gold on ivory is 2:1 contrast (unreadable) */
       .shimmer {
         animation: none;
         background: none;
-        -webkit-text-fill-color: var(--gold);
-        color: var(--gold);
+        -webkit-text-fill-color: var(--brown);
+        color: var(--brown);
       }
 
       /* Monument silhouettes overlap badly on narrow screens */
@@ -560,8 +557,8 @@
       .footer-logo { width: 64px; height: 64px; }
       .footer-love { font-size: 15px; }
 
-      /* Envelope scene gap */
-      .envelope-scene { gap: 24px; }
+      /* Scroll hint lower on small screens */
+      .scroll-hint { bottom: 28px; }
     }
 
     /* ═══════════════════════════════════════════════════
@@ -569,19 +566,14 @@
     ═══════════════════════════════════════════════════ */
     @media (max-width: 389px) {
 
-      /* Envelope shrinks further */
-      .envelope            { width: 310px; height: 202px; }
-      .env-fold-l          { border-width: 101px 0 0 155px; }
-      .env-fold-r          { border-width: 101px 155px 0 0; }
+      /* envelope is fullscreen — only scale interactive elements */
       .wax-seal,
-      .wax-seal-disc       { width: 50px; height: 50px; }
-      .wax-logo            { width: 34px; height: 34px; }
-      .letter-card         { gap: 4px; padding: 10px 12px; }
-      .lc-logo             { width: 38px; height: 38px; }
-      .lc-names            { font-size: 18px; }
-      .lc-arch,
-      .lc-divider          { width: 100px; }
-      .lc-bless            { font-size: 7px; }
+      .wax-seal-disc       { width: 64px; height: 64px; }
+      .wax-logo            { width: 42px; height: 42px; }
+      .letter-card         { height: 260px; padding: 16px 18px; gap: 5px; }
+      .lc-logo             { width: 48px; height: 48px; }
+      .lc-names            { font-size: 24px; }
+      .lc-bless            { font-size: 8px; }
 
       /* Union names */
       .union-names  { font-size: 36px; }
@@ -626,30 +618,31 @@
             <img class="wax-logo" src="logo.png" alt="KC monogram" />
           </div>
         </div>
+      </div>
 
-        <div class="letter-card" aria-hidden="true">
-          <svg class="lc-arch" viewBox="0 0 220 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8,44 Q8,5 110,2 Q212,5 212,44" stroke="#c8a56c" stroke-width="0.9"/>
-            <path d="M22,44 Q22,17 110,14 Q198,17 198,44" stroke="#c8a56c" stroke-width="0.4" opacity="0.4"/>
-            <circle cx="110" cy="2" r="3.2" fill="#c8a56c" opacity="0.55"/>
-            <circle cx="60"  cy="23" r="1.6" fill="none" stroke="#c8a56c" stroke-width="0.7"/>
-            <circle cx="160" cy="23" r="1.6" fill="none" stroke="#c8a56c" stroke-width="0.7"/>
-            <line x1="8" y1="44" x2="212" y2="44" stroke="#c8a56c" stroke-width="0.6"/>
-            <polygon points="84,44 88,40 92,44 88,48"   fill="none" stroke="#c8a56c" stroke-width="0.55"/>
-            <polygon points="128,44 132,40 136,44 132,48" fill="none" stroke="#c8a56c" stroke-width="0.55"/>
-          </svg>
-          <p class="lc-bless">&#2344;&#2358;&#2381;&#2352;&#2368; &#2327;&#2339;&#2375;&#2358;&#2366;&#2351; &#2344;&#2350;&#2307;</p>
-          <img class="lc-logo" src="logo.png" alt="KC" />
-          <p class="lc-names">Charu &amp; Koushik</p>
-          <svg class="lc-divider" viewBox="0 0 220 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <line x1="0"   y1="6" x2="76"  y2="6" stroke="#c8a56c" stroke-width="0.65"/>
-            <polygon points="82,6 88,2 94,6 88,10"    fill="none" stroke="#c8a56c" stroke-width="0.75"/>
-            <circle  cx="110" cy="6" r="2.6"          fill="none" stroke="#c8a56c" stroke-width="0.75"/>
-            <polygon points="126,6 132,2 138,6 132,10" fill="none" stroke="#c8a56c" stroke-width="0.75"/>
-            <line x1="144" y1="6" x2="220" y2="6" stroke="#c8a56c" stroke-width="0.65"/>
-          </svg>
-          <p class="lc-date">10 &middot; 05 &middot; 2026</p>
-        </div>
+      <!-- letter-card is outside env-body so it can rise above the envelope freely -->
+      <div class="letter-card" aria-hidden="true">
+        <svg class="lc-arch" viewBox="0 0 220 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8,44 Q8,5 110,2 Q212,5 212,44" stroke="#c8a56c" stroke-width="0.9"/>
+          <path d="M22,44 Q22,17 110,14 Q198,17 198,44" stroke="#c8a56c" stroke-width="0.4" opacity="0.4"/>
+          <circle cx="110" cy="2" r="3.2" fill="#c8a56c" opacity="0.55"/>
+          <circle cx="60"  cy="23" r="1.6" fill="none" stroke="#c8a56c" stroke-width="0.7"/>
+          <circle cx="160" cy="23" r="1.6" fill="none" stroke="#c8a56c" stroke-width="0.7"/>
+          <line x1="8" y1="44" x2="212" y2="44" stroke="#c8a56c" stroke-width="0.6"/>
+          <polygon points="84,44 88,40 92,44 88,48"   fill="none" stroke="#c8a56c" stroke-width="0.55"/>
+          <polygon points="128,44 132,40 136,44 132,48" fill="none" stroke="#c8a56c" stroke-width="0.55"/>
+        </svg>
+        <p class="lc-bless">&#2344;&#2358;&#2381;&#2352;&#2368; &#2327;&#2339;&#2375;&#2358;&#2366;&#2351; &#2344;&#2350;&#2307;</p>
+        <img class="lc-logo" src="logo.png" alt="KC" />
+        <p class="lc-names">Charu &amp; Koushik</p>
+        <svg class="lc-divider" viewBox="0 0 220 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0"   y1="6" x2="76"  y2="6" stroke="#c8a56c" stroke-width="0.65"/>
+          <polygon points="82,6 88,2 94,6 88,10"    fill="none" stroke="#c8a56c" stroke-width="0.75"/>
+          <circle  cx="110" cy="6" r="2.6"          fill="none" stroke="#c8a56c" stroke-width="0.75"/>
+          <polygon points="126,6 132,2 138,6 132,10" fill="none" stroke="#c8a56c" stroke-width="0.75"/>
+          <line x1="144" y1="6" x2="220" y2="6" stroke="#c8a56c" stroke-width="0.65"/>
+        </svg>
+        <p class="lc-date">10 &middot; 05 &middot; 2026</p>
       </div>
     </div>
 
@@ -963,7 +956,7 @@
     .to('.scroll-hint', { opacity: 0, duration: 0.12, ease: 'none' }, 0)
     .to('.wax-seal',    { opacity: 0, scale: 0.88, duration: 0.06, ease: 'none' }, 0.28)
     .to('.env-flap',    { rotateX: -182, duration: 0.32, ease: 'none' }, 0.36)
-    .to('.letter-card', { y: isMobile ? -170 : -110, opacity: 1, duration: 0.34, ease: 'none' }, 0.66);
+    .to('.letter-card', { y: isMobile ? -360 : -520, opacity: 1, duration: 0.34, ease: 'none' }, 0.66);
 
   /* Scroll start thresholds — fire earlier on short mobile viewports */
   var startSoon  = isMobile ? 'top 95%' : 'top 80%';
