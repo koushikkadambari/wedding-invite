@@ -346,7 +346,8 @@
       background: linear-gradient(155deg, var(--charcoal-warm) 0%, #1e1508 100%);
       display: flex; align-items: center; justify-content: center; overflow: hidden;
     }
-    .portrait-initial { font-family: var(--script); font-size: 88px; color: var(--gold-dim); line-height: 1; opacity: 0.75; }
+    .portrait-initial { display: none; font-family: var(--script); font-size: 88px; color: var(--gold-dim); line-height: 1; opacity: 0.75; }
+    .portrait:not([style*="background-image"]) .portrait-initial { display: flex; }
 
     .person-name { font-family: var(--serif); font-size: 22px; font-weight: 400; font-style: italic; color: var(--on-dark); line-height: 1.35; }
     .person-lineage { font-family: var(--sc); font-size: 11px; letter-spacing: 0.08em; color: var(--on-dark); line-height: 2; }
@@ -683,7 +684,7 @@
   <div class="couple-grid">
     <div class="person">
       <div class="arch-frame">
-        <div class="portrait" aria-label="Charu">
+        <div class="portrait" aria-label="Charu" style="background-image:url('charu.jpg');background-size:cover;background-position:center top;">
           <span class="portrait-initial">C</span>
         </div>
       </div>
@@ -701,7 +702,7 @@
 
     <div class="person">
       <div class="arch-frame">
-        <div class="portrait" aria-label="Koushik">
+        <div class="portrait" aria-label="Koushik" style="background-image:url('koushik.jpg');background-size:cover;background-position:center top;">
           <span class="portrait-initial">K</span>
         </div>
       </div>
